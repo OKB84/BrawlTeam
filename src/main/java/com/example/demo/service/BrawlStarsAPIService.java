@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.config.RestTemplateConfig;
 import com.example.demo.controller.dto.ClubMember;
 import com.example.demo.controller.dto.ClubPlayerAPIDto;
 import com.example.demo.controller.dto.PlayerInfoDto;
@@ -22,6 +24,9 @@ import com.example.demo.controller.dto.PlayerInfoDto;
  */
 @Service
 public class BrawlStarsAPIService {
+
+	@Autowired
+	RestTemplateConfig config;
 
 	// エンドポイントのベースURL
 	public static final String BASE_URL = "https://api.brawlstars.com/v1/";
@@ -40,6 +45,7 @@ public class BrawlStarsAPIService {
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 
 		    RestTemplate restTemplate = new RestTemplate();
+		    config.customize(restTemplate);
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, PlayerInfoDto.class
