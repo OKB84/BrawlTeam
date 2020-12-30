@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
 import java.net.Authenticator;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -57,7 +61,10 @@ public class BrawlStarsAPIService {
 	                }
 	            });
 
-		    RestTemplate restTemplate = new RestTemplate();
+	        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+	        factory.setProxy(new Proxy(Type.HTTP, new InetSocketAddress(proxyUrl.getHost(), proxyUrl.getPort())));
+
+		    RestTemplate restTemplate = new RestTemplate(factory);
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, PlayerInfoDto.class
