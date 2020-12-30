@@ -27,7 +27,7 @@ public class BrawlStarsAPIService {
 	public static final String BASE_URL = "https://api.brawlstars.com/v1/";
 
 	// アクセスに必要な当システムのAPIキー
-	public static final String API_KEY = "BRAWL_STARS_API_KEY";
+	public static final String API_KEY = System.getenv("BRAWL_STARS_API_KEY");
 
 	// プレイヤータグからプレイヤー情報を取得（１件のみ）
 	public PlayerInfoDto getPlayerInfo(String playerTag) {
