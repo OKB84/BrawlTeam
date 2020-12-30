@@ -78,14 +78,16 @@ public class BrawlStarsAPIService {
 	            System.out.println(inputLine);
 
 	        in.close();
+//
+//		    RestTemplate restTemplate = new RestTemplate();
+//		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
+//		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
+//		    	HttpMethod.GET, req, PlayerInfoDto.class
+//		    );
+//		    System.out.println(res.getBody());
+//		    return res.getBody();
 
-		    RestTemplate restTemplate = new RestTemplate();
-		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
-		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
-		    	HttpMethod.GET, req, PlayerInfoDto.class
-		    );
-		    System.out.println(res.getBody());
-		    return res.getBody();
+	        return null;
 
 		} catch (HttpClientErrorException | IOException e) {
 
