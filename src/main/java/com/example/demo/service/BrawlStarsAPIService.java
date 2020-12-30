@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -37,6 +41,14 @@ public class BrawlStarsAPIService {
 		    headers.add("Authorization", "Bearer " + API_KEY);
 		    headers.add("Accept", "application/json");
 		    HttpEntity<String> req = new HttpEntity<>(headers);
+
+		    // APIがIPの指定を必要とするため固定IPから通信
+		    final String proxyHost = System.getenv("PROXY_HOST"); // プロキシホスト
+		    final int proxyPort = 9293; // プロキシポート番号
+
+		    SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+		    factory.setProxy(new Proxy(Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
+
 		    RestTemplate restTemplate = new RestTemplate();
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
