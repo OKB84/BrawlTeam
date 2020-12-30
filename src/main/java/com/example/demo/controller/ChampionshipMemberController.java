@@ -49,14 +49,14 @@ public class ChampionshipMemberController {
 		// ログイン中のユーザの大会参加候補メンバーのプレイヤー情報を取得
 		List<ChampionshipMemberDto> list = playerService.getMembersPlayerInfo();
 		model.addAttribute("playerList", list);
-		return "/championship-member/index";
+		return "championship-member/index";
 	}
 
 	// メンバー追加画面の初期表示
 	@GetMapping("/create")
 	String getCreate() {
 
-		return "/championship-member/create";
+		return "championship-member/create";
 	}
 
 }

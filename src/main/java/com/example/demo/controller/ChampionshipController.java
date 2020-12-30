@@ -31,13 +31,13 @@ public class ChampionshipController {
 	@GetMapping("/index")
 	String getIndex() {
 
-		return "/championship/index";
+		return "championship/index";
 	}
 
 	// 新規作成画面の表示
 	@GetMapping("/create")
 	String getCreate() {
-		return "/championship/create";
+		return "championship/create";
 	}
 
 	// 編集画面の表示
@@ -55,6 +55,6 @@ public class ChampionshipController {
 		// Vueに渡す用の大会IDをセット
 		model.addAttribute("championshipId", championshipId);
 
-		return "/championship/edit";
+		return "championship/edit";
 	}
 }
