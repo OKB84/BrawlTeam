@@ -1,12 +1,15 @@
 package com.example.demo.service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Authenticator;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +55,8 @@ public class BrawlStarsAPIService {
 	        String user = userInfo.substring(0, userInfo.indexOf(':'));
 	        String password = userInfo.substring(userInfo.indexOf(':') + 1);
 
+	        URLConnection conn = null;
+
 	        System.setProperty("http.proxyHost", proxyUrl.getHost());
 	        System.setProperty("http.proxyPort", Integer.toString(proxyUrl.getPort()));
 
@@ -64,7 +69,17 @@ public class BrawlStarsAPIService {
 	        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 	        factory.setProxy(new Proxy(Type.HTTP, new InetSocketAddress(proxyUrl.getHost(), proxyUrl.getPort())));
 
-		    RestTemplate restTemplate = new RestTemplate(factory);
+	        URL url = new URL("http://ip.quotaguard.com");
+	        conn = url.openConnection();
+	        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+	        String inputLine;
+	        while ((inputLine = in.readLine()) != null)
+	            System.out.println(inputLine);
+
+	        in.close();
+
+		    RestTemplate restTemplate = new RestTemplate();
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, PlayerInfoDto.class
@@ -72,7 +87,7 @@ public class BrawlStarsAPIService {
 		    System.out.println(res.getBody());
 		    return res.getBody();
 
-		} catch (HttpClientErrorException | MalformedURLException e) {
+		} catch (HttpClientErrorException | IOException e) {
 
 			// playerTagに該当するプレイヤーが見つからなかった場合
 			e.printStackTrace();
