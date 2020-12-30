@@ -45,7 +45,7 @@ public class BrawlStarsAPIService {
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 
 		    RestTemplate restTemplate = new RestTemplate();
-		    config.customize(restTemplate);
+		    config.customize(restTemplate);		// 本番環境での固定IP利用のため
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, PlayerInfoDto.class
@@ -101,6 +101,7 @@ public class BrawlStarsAPIService {
 		    headers.add("Accept", "application/json");
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 		    RestTemplate restTemplate = new RestTemplate();
+		    config.customize(restTemplate);		// 本番環境での固定IP利用のため
 		    ResponseEntity<ClubPlayerAPIDto> res = restTemplate.exchange(
 		    	BASE_URL + "clubs/" + clubTag + "/members",		// クラブタグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, ClubPlayerAPIDto.class

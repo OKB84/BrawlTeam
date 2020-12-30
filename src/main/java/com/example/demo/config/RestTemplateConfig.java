@@ -22,6 +22,11 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * 本番環境での固定IP利用のためにプロキシ設定を行うクラス
+ * @author root1
+ *
+ */
 @Component
 public class RestTemplateConfig implements RestTemplateCustomizer {
 
