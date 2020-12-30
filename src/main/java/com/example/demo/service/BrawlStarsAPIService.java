@@ -1,15 +1,5 @@
 package com.example.demo.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Authenticator;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.Proxy.Type;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +7,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -44,52 +33,21 @@ public class BrawlStarsAPIService {
 	public PlayerInfoDto getPlayerInfo(String playerTag) {
 
 		try {
+
 		    HttpHeaders headers = new HttpHeaders();
 		    headers.add("Authorization", "Bearer " + API_KEY);
 		    headers.add("Accept", "application/json");
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 
-		    // APIがIPの指定を必要とするため固定IPから通信
-	        URL proxyUrl = new URL(System.getenv("QUOTAGUARDSTATIC_URL"));
-	        String userInfo = proxyUrl.getUserInfo();
-	        String user = userInfo.substring(0, userInfo.indexOf(':'));
-	        String password = userInfo.substring(userInfo.indexOf(':') + 1);
+		    RestTemplate restTemplate = new RestTemplate();
+		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
+		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
+		    	HttpMethod.GET, req, PlayerInfoDto.class
+		    );
+		    System.out.println(res.getBody());
+		    return res.getBody();
 
-	        URLConnection conn = null;
-
-	        System.setProperty("http.proxyHost", proxyUrl.getHost());
-	        System.setProperty("http.proxyPort", Integer.toString(proxyUrl.getPort()));
-
-	        Authenticator.setDefault(new Authenticator() {
-	                protected PasswordAuthentication getPasswordAuthentication() {
-	                    return new PasswordAuthentication(user, password.toCharArray());
-	                }
-	            });
-
-	        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-	        factory.setProxy(new Proxy(Type.HTTP, new InetSocketAddress(proxyUrl.getHost(), proxyUrl.getPort())));
-
-	        URL url = new URL("http://ip.quotaguard.com");
-	        conn = url.openConnection();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-	        String inputLine;
-	        while ((inputLine = in.readLine()) != null)
-	            System.out.println(inputLine);
-
-	        in.close();
-//
-//		    RestTemplate restTemplate = new RestTemplate();
-//		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
-//		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
-//		    	HttpMethod.GET, req, PlayerInfoDto.class
-//		    );
-//		    System.out.println(res.getBody());
-//		    return res.getBody();
-
-	        return null;
-
-		} catch (HttpClientErrorException | IOException e) {
+		} catch (HttpClientErrorException e) {
 
 			// playerTagに該当するプレイヤーが見つからなかった場合
 			e.printStackTrace();
