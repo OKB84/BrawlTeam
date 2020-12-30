@@ -307,8 +307,8 @@ public class APIController {
 		int registCount = 0;	// DB更新件数
 
 		// クラブ、プレイヤー、キャラクターのマスタを更新し、ユーザおよび所有キャラ関係をDB登録
-		registCount += playerService.createOnDuplicateKeyUpdate(playerInfoDto)
-						+ clubService.create(playerInfoDto.getClub())
+		registCount += clubService.create(playerInfoDto.getClub())
+						+ playerService.createOnDuplicateKeyUpdate(playerInfoDto)
 						+ userService.updatePlayerTag(playerInfoDto.getTag())
 						+ brawlerMasterService.create(playerInfoDto.getBrawlers())
 						+ ownBrawlerService.create(playerInfoDto)
