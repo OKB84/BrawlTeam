@@ -27,7 +27,7 @@ public class BrawlStarsAPIService {
 	public static final String BASE_URL = "https://api.brawlstars.com/v1/";
 
 	// アクセスに必要な当システムのAPIキー
-	public static final String API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjgyYzc3YWM1LTZiZGMtNDcxMC1hY2FkLTgwNWU4YTFmZWE0NyIsImlhdCI6MTYwNTcxMzY2MCwic3ViIjoiZGV2ZWxvcGVyL2U4ODRjMGY3LTk0NTMtZGQxYi1mZTkxLTc1NTEyNmViOWIyNiIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMTUzLjI0Ni4xMzQuMTEyIl0sInR5cGUiOiJjbGllbnQifV19._SdrBRrkLlz_FrHBCj8A3gVd3Mv2batOYYQtIrUPbM70B8fgqMBdKax4poC_oFzTefTbNzY3Nov2-HqIEuZwsw";
+	public static final String API_KEY = "BRAWL_STARS_API_KEY";
 
 	// プレイヤータグからプレイヤー情報を取得（１件のみ）
 	public PlayerInfoDto getPlayerInfo(String playerTag) {
