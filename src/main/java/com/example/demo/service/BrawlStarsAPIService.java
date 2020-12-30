@@ -49,7 +49,7 @@ public class BrawlStarsAPIService {
 		    SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 		    factory.setProxy(new Proxy(Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
 
-		    RestTemplate restTemplate = new RestTemplate();
+		    RestTemplate restTemplate = new RestTemplate(factory);
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, PlayerInfoDto.class
