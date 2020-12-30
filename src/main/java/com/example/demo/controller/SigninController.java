@@ -40,7 +40,7 @@ public class SigninController {
 	// ログイン前のトップページ初期表示
 	@GetMapping("/")
 	String index() {
-		return "/toppage/index";
+		return "toppage/index";
 	}
 
 	// ログアウト

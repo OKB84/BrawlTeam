@@ -22,7 +22,7 @@ public class UserController {
 	@GetMapping("/profile")
 	String getMypage() {
 
-		return "/account/profile";
+		return "account/profile";
 	}
 
 }
