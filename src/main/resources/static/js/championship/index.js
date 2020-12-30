@@ -50,7 +50,6 @@ var app = new Vue({
 
 			// 空行クリック時は何もアクションしない
 			if (!championshipId) {
-				console.log('return null');
 				return;
 			}
 
@@ -62,7 +61,6 @@ var app = new Vue({
 				.then(data => {		// JSONデータ
 					this.championshipDetail = data;
 					this.showModal = true;		// 大会詳細のモーダルを表示
-					console.log(data);
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);
@@ -70,8 +68,6 @@ var app = new Vue({
 		},
 		// 大会削除
 		deleteChampionship: function(championshipId) {
-
-			console.log(championshipId);
 
 			let deleteChampionshipList = [];
 
@@ -109,16 +105,13 @@ var app = new Vue({
 			fetch('/api/championship/delete', param)
 				.then(response => {
 					if(response.ok){
-						console.log("ok");
 						this.getAllChampionship();
 					} else {
-						console.log("not ok");
 						return response.json();		// Promiseを返す
 					}
 				})
 				.then(data => {		// JSONデータ
 					this.showModal = false;
-					console.log(data);
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);

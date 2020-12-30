@@ -247,21 +247,17 @@ var app = new Vue({
 			fetch('/api/championship/create', param)
 				.then(response => {
 					if(response.ok){
-						console.log("ok");
 						alert('大会が作成されました。大会一覧へ移動します。');
 						window.location.href = '/championship/index';
 					} else {
-						console.log("not ok");
 						return response.json();		// Promiseを返す
 					}
 				})
 				.then(data => {		// JSONデータ
-					console.log(data);
 					this.displayErrorMessage(data);
 					alert('エラーが発生しました。入力項目をご確認ください。');
 				})
 				.catch(error => {	// エラーの場合
-					console.log("error returned");
 					console.log(error);
 				});
 		},
@@ -337,8 +333,6 @@ var app = new Vue({
 				.then(data => {		// JSONデータ
 					this.playerDetail = data;
 					this.displayChart();
-
-					console.log(data);
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);

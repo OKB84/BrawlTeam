@@ -62,7 +62,6 @@ public class ChampionshipMemberService {
 
 		entity.setMemberPlayerTag(playerTag);
 
-		System.out.println(entity);
 		return mapper.delete(entity);
 	}
 

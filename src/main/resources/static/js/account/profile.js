@@ -16,17 +16,10 @@ var app = new Vue({
 		getCurrentPlayerTag: function() {
 			fetch('/api/user/tag')
 				.then(response => {
-					console.log(response);
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
 					this.currentPlayerTag = data.playerTag ? data.playerTag.replace('%', '#') : null;
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
@@ -54,11 +47,6 @@ var app = new Vue({
 
 			fetch('/api/user/tag', param)
 				.then(response => {
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
@@ -68,7 +56,6 @@ var app = new Vue({
 					} else {	// バリデーションエラー等発生の場合
 						this.playerTagError = data[0].message;
 					}
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
@@ -98,11 +85,6 @@ var app = new Vue({
 
 			fetch('/api/user/delete', param)
 				.then(response => {
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
@@ -112,7 +94,6 @@ var app = new Vue({
 					} else {
 						alert(data[0].message);
 					}
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');

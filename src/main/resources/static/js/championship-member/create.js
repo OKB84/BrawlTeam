@@ -20,18 +20,11 @@ var app = new Vue({
 		getUserPlayerTag: function() {
 			fetch('/api/user/tag')
 				.then(response => {
-					console.log(response);
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
 					// プレイヤータグが登録されていなければインポートボタンを非活性にする
 					this.isImportActive = data.playerTag ? true : false;
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					console.log(error);
@@ -58,11 +51,6 @@ var app = new Vue({
 
 			fetch('/api/member/create', param)
 				.then(response => {
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
@@ -74,7 +62,6 @@ var app = new Vue({
 					} else {	// バリデーションエラー等発生の場合
 						this.displayErrorMessage(data);
 					}
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
@@ -107,11 +94,6 @@ var app = new Vue({
 
 			fetch('/api/member/import', param)
 				.then(response => {
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
@@ -123,7 +105,6 @@ var app = new Vue({
 					}
 					// 更新完了メッセージを表示後にローディングモーダルを非表示
 					setTimeout(this.switchShowUpdatingModal, 1000);
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');

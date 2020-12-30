@@ -97,15 +97,8 @@ var app = new Vue({
 				})
 			};
 
-			console.log(param.body);
-
 			fetch('/api/member/delete', param)
 				.then(response => {
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
@@ -115,7 +108,6 @@ var app = new Vue({
 					} else {
 						alert('削除に失敗しました。画面をリロードしてください。');
 					}
-					console.log(data);
 				})
 				.catch(error => {	// エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
@@ -142,7 +134,6 @@ var app = new Vue({
 					// （戻り値にセットされていないため）
 					this.playerDetail.playerTag = playerTag;
 					this.displayChart();
-					console.log(data);
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);
@@ -240,11 +231,6 @@ var app = new Vue({
 
 			fetch('/api/member/create', param)
 				.then(response => {
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
@@ -256,7 +242,6 @@ var app = new Vue({
 					} else {	// バリデーションエラー等発生の場合
 						this.displayErrorMessage(data);
 					}
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
@@ -289,11 +274,6 @@ var app = new Vue({
 
 			fetch('/api/member/import', param)
 				.then(response => {
-					if(response.ok){
-						console.log("ok");
-					} else {
-						console.log("not ok");
-					}
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
@@ -308,7 +288,6 @@ var app = new Vue({
 					} else {	// バリデーションエラー等発生の場合
 						this.displayErrorMessage(data);
 					}
-					console.log(data);
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
