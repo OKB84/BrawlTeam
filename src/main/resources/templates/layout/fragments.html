@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title, links, scripts)">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="google-signin-client_id"content="925380535240-s21etqqa2bchg9tj4p157hjlda3jn8gl.apps.googleusercontent.com">
+
+	<title th:text="${title}"></title>
+
+    <!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <!-- Common CSS -->
+	<link href="/css/common/app.css" rel="stylesheet">
+
+    <!-- Popper.JS -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- Comon JS -->
+	<script type="text/javascript" src="/js/common/app.js"></script>
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+	<th:block th:replace="${links}"></th:block>
+	<th:block th:replace="${scripts}"></th:block>
+</head>
+
+<body>
+	<div th:fragment="sidebar(parent, child)" th:remove="tag">
+		<nav id="sidebar">
+			<div id="dismiss">
+				<i class="fas fa-arrow-left"></i>
+			</div>
+			<div class="sidebar-header">
+				<h4>Brawl Teams β</h4>
+			</div>
+			<ul class="list-unstyled components">
+				<p>メニュー</p>
+				<li th:classappend="${parent} == 'championship' ? active : ''">
+					<a href="#championshipSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-trophy"></i> 大会</a>
+					<ul class="collapse list-unstyled" id="championshipSubmenu">
+						<li th:classappend="${parent == 'championship' && child == 'index'} ? active : ''"><a href="/championship/index"><i class="fas fa-list-ul"></i> 一覧</a></li>
+						<li th:classappend="${parent == 'championship' && child == 'create'} ? active : ''"><a href="/championship/create"><i class="fas fa-plus"></i> 新規作成</a></li>
+					</ul>
+				</li>
+				<li th:classappend="${parent} == 'member' ? active : ''">
+					<a href="#memberSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-users"></i> メンバー</a>
+					<ul class="collapse list-unstyled" id="memberSubmenu">
+						<li th:classappend="${parent == 'member' && child == 'index'} ? active : ''"><a href="/championship-member/index"><i class="fas fa-list-ul"></i> 一覧</a></li>
+						<li th:classappend="${parent == 'member' && child == 'create'} ? active : ''"><a href="/championship-member/create"><i class="fas fa-user-plus"></i> 追加</a></li>
+					</ul>
+				</li>
+				<li th:classappend="${parent} == 'account' ? active : ''"><a href="/user/profile"><i class="fas fa-user-cog"></i> アカウント</a></li>
+			</ul>
+			<ul class="list-unstyled CTAs">
+				<li><a href="/signout" onclick="return confirm('ログアウトします。よろしいですか？')" class="signout">ログアウト</a></li>
+			</ul>
+		</nav>
+	    <div class="overlay"></div>
+
+	</div>
+
+	<div th:fragment="navbar(title)" th:remove="tag">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-app">
+                    <i class="fas fa-align-justify"></i>
+                </button>
+                <h4 th:text="${title}"></h4>
+            </div>
+        </nav>
+	</div>
+
+	<!-- 三項演算子にしなくとも画面表示は問題なく行われるが、コンソールにエラーが出る -->
+	<div th:fragment="playerDetail(showHeader)" th:remove="tag">
+		<table class="table table-sm player-detail">
+			<tr th:if="${showHeader == 'showHeader'}" class="table-header">
+				<th colspan="2">プレイヤー詳細</th>
+			</tr>
+			<tr>
+				<td>名前</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.name : '' }}</td>
+			</tr>
+			<tr>
+				<td>トロフィー数</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.trophies : '' }}</td>
+			</tr>
+			<tr>
+				<td>最多トロフィー数</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.highestTrophies : '' }}</td>
+			</tr>
+			<tr>
+				<td>パワープレイポイント</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.powerPlayPoints : '' }}</td>
+			</tr>
+			<tr>
+				<td>最多パワープレイポイント</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.highestPowerPlayPoints : '' }}</td>
+			</tr>
+			<tr>
+				<td>ソロバトルロイヤル勝利数</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.soloVictories : '' }}</td>
+			</tr>
+			<tr>
+				<td>デュオバトルロイヤル勝利数</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.duoVictories : '' }}</td>
+			</tr>
+		</table>
+		<canvas v-if="chartLoaded" id="radarChart"></canvas>
+	</div>
+
+	<div th:fragment="championshipForm" th:remove="tag">
+		<div class="row basic-info">
+			<div class="offset-md-2 col-md-6">
+				<div class="basic-info-row">
+					<p class="has-error-p">{{ invalidDateError }}</p>
+					<p class="has-error-p">{{ dateError }}</p>
+					<label for="date">開催日付</label>
+					<input type="date" id="date" v-model="date" v-bind:class="{ 'has-error': dateError || invalidDateError }">
+				</div>
+				<div class="basic-info-row">
+					<p class="has-error-p">{{ timeError }}</p>
+					<label for="time">開催時刻</label>
+					<input type="time" id="time" v-model="time" v-bind:class="{ 'has-error': timeError || invalidDateError }">
+				</div>
+				<div>
+					<p class="has-error-p">{{ nameError }}</p>
+					<label for="name">大会名称</label>
+					<input type="text" id="name" v-model="name" v-bind:class="{ 'has-error': nameError }">
+				</div>
+			</div>
+			<div class="col-sm-2 sync-area">
+				<button :disabled="playerList.length === 0" @click="updateToLatestPlayerInfo()" class="btn btn-secondary sync"><i class="fas fa-sync-alt"></i> プレイヤー情報更新</button>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6 offset-xl-1 col-xl-5">
+				<p class="has-error-p">{{ teamListError }}</p>
+				<div class="table-responsive">
+					<table class="table table-sm table-hover player-list">
+						<thead>
+							<tr>
+								<th>参加チーム</th>
+								<th>名前</th>
+								<th>トロフィー数</th>
+								<th>キャラクター数</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="player in getPlayerList" :key="player.playerTag">
+								<td>
+									<select v-model="player.teamNum" @change="teamSelected(player)" :disabled="!Object.keys(player).length">
+										<option value=""></option>
+										<option v-for="n in teamList.length" v-bind:value="n">チーム{{ n }}</option>
+										<option value="0">不参加</option>
+									</select>
+								</td>
+								<td @click="showDetail(player.playerTag)">{{player.name}}</td>
+								<td @click="showDetail(player.playerTag)" class="td-right">{{player.trophies}}</td>
+								<td @click="showDetail(player.playerTag)" class="td-right">{{player.numOfBrawler}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<paginate
+					:page-count="getPageCount"
+					:page-range="3"
+					:margin-pages="2"
+					:click-handler="clickCallback"
+					:prev-text="'＜'"
+					:next-text="'＞'"
+					:container-class="'pagination'"
+					:containerClass="'pagination'"
+					:page-class="'page-item'"
+					:page-link-class="'page-link'"
+					:prev-class="'page-item'"
+					:prev-link-class="'page-link'"
+					:next-class="'page-item'"
+					:next-link-class="'page-link'">
+				</paginate>
+			</div>
+			<div class="col-md-6 col-xl-5">
+				<div th:insert="./layout/fragments :: playerDetail('showHeader')"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="offset-xl-1 col-xl-10 table-responsive">
+				<table class="table table-sm team-list">
+					<thead>
+						<tr>
+							<th>チームNo.</th>
+							<th>チーム名</th>
+							<th>トロフィー数</th>
+							<th>キャラクター数</th>
+							<th>メンバー1</th>
+							<th>メンバー2</th>
+							<th>メンバー3</th>
+						</tr>
+					</thead>
+					<div></div>
+					<tbody>
+						<template v-for="(team, index) in teamList">
+							<tr v-if="team.message" class="message-row" v-bind:class="{ 'has-error': team.message }">
+								<td></td>
+								<td colspan="6" style="color: red">{{ team.message }}</td>
+							</tr>
+							<tr v-bind:class="{ 'has-error': team.message }">
+								<td class="team-num">{{ team.teamNum }}</td>
+								<td><input type="text" v-model="team.name" class="team-name"></td>
+								<td class="td-right">{{ team.trophies }}</td>
+								<td class="td-right">{{ team.numOfBrawler }}</td>
+								<td>{{ team.member[0] ? team.member[0].name : '' }}</td>
+								<td>{{ team.member[1] ? team.member[1].name : '' }}</td>
+								<td>{{ team.member[2] ? team.member[2].name : '' }}</td>
+							</tr>
+						</template>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div th:fragment="modalUpdating" th:remove="tag">
+		<transition name="fade">
+			<div v-if="showUpdatingModal">
+				<div class="modal">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-body">
+								<p>{{ modalUpdatingMessage }}</p>
+								<div class="loader"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-backdrop show"></div>
+			</div>
+		</transition>
+	</div>
+</body>
+</html>

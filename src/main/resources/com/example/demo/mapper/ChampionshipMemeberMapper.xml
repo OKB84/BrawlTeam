@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ChampionshipMemberMapper">
+
+	<!-- 存在しないメンバー情報に限りレコードを新規作成する -->
+	<insert id="create" parameterType="com.example.demo.entity.ChampionshipMemberEntity">
+		INSERT INTO championship_member (
+			user_id,
+			member_player_tag
+		)
+		SELECT
+			#{userId, jdbcType=INTEGER},
+			#{memberPlayerTag, jdbcType=VARCHAR}
+		FROM
+			dual
+		WHERE NOT EXISTS (
+			SELECT
+				user_id,
+				member_player_tag
+			FROM
+				championship_member
+			WHERE
+				user_id = #{userId, jdbcType=INTEGER}
+				AND member_player_tag = #{memberPlayerTag, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="search" resultType="string" parameterType="int">
+		SELECT
+			member_player_tag
+		FROM
+			championship_member
+		WHERE
+			user_id = #{userId, jdbcType=INTEGER}
+	</select>
+
+	<select id="searchIfExisted" resultType="string" parameterType="com.example.demo.entity.ChampionshipMemberEntity">
+		SELECT
+			member_player_tag
+		FROM
+			championship_member
+		WHERE
+			user_id = #{userId, jdbcType=INTEGER}
+			AND member_player_tag = #{memberPlayerTag, jdbcType=VARCHAR}
+	</select>
+
+	<delete id="delete" parameterType="com.example.demo.entity.ChampionshipMemberEntity">
+		DELETE FROM
+			championship_member
+		WHERE
+			user_id = #{userId, jdbcType=INTEGER}
+			AND member_player_tag = #{memberPlayerTag, jdbcType=VARCHAR}
+	</delete>
+
+</mapper>
+

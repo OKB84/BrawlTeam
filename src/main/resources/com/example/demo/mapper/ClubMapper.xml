@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ClubMapper">
+
+	<!-- 存在しないクラブの情報に限りレコードを新規作成する -->
+	<insert id="create" parameterType="com.example.demo.entity.ClubEntity">
+		INSERT INTO club (
+			tag,
+			name
+		)
+		SELECT
+			#{tag, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR}
+		FROM
+			dual
+		WHERE NOT EXISTS (
+			SELECT
+				tag
+			FROM
+				club
+			WHERE
+				tag = #{tag, jdbcType=VARCHAR}
+			AND
+				name = #{name, jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>
+

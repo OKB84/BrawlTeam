@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<head th:replace="./layout/fragments :: head('アカウント', ~{::link}, ~{})">
+    <!-- Custom CSS -->
+	<link href="/css/account/profile.css" rel="stylesheet">
+
+</head>
+<body>
+	<div id="app" class="container-fluid">
+    	<!-- Sidebar  -->
+		<div th:insert="./layout/fragments :: sidebar('account', '')"></div>
+
+       	<div id="content">
+ 			<div th:insert="./layout/fragments :: navbar('アカウント')"></div>
+ 			<div class="row">
+				<div class="offset-xl-4 col-xl-4 offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10">
+					<p>あなたのプレイヤータグ：</p>
+					<p class="current-playertag">{{ currentPlayerTag || '未設定です。' }}</p>
+
+					<div class="save-forms">
+						<p class="has-error-p">{{ playerTagError }}</p>
+						<span># </span><input type="text" id="playerTag" name="playerTag" v-model="playerTag" v-bind:class="{ 'has-error': playerTagError }">
+						<button type="button" @click="savePlayerTag" class="btn btn-secondary save-btn"><i class="fas fa-save"></i> {{ currentPlayerTag ? '更新' : '登録' }}</button>
+					</div>
+					<p class="small">※プレイヤータグの<span class="stress-char">「#」以降の英数字</span>を入力してください。</p>
+					<p class="small">※プレイヤータグを設定すると、メンバー追加の際に所属クラブからのインポート機能を利用することができるようになります。</p>
+					<div class="delete-btn-area">
+						<button type="button" @click="deleteAccount" class="btn btn-danger"><i class="fas fa-user-friends"></i> アカウント削除</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script type="text/javascript" src="/js/account/profile.js"></script>
+</body>
+</html>

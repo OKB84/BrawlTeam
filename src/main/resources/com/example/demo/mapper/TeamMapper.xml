@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.TeamMapper">
+
+	<insert id="create" parameterType="com.example.demo.entity.TeamEntity">
+		INSERT INTO team (
+			championship_id,
+			name,
+			team_num
+		) VALUES (
+			#{championshipId, jdbcType=INTEGER},
+			#{name, jdbcType=VARCHAR},
+			#{teamNum, jdbcType=INTEGER}
+		)
+	</insert>
+
+	<select id="getCreatedId" resultType="int" parameterType="com.example.demo.entity.TeamEntity">
+		SELECT
+			id
+		FROM
+			team
+		WHERE
+			championship_id = #{championshipId, jdbcType=INTEGER} AND
+			name = #{name, jdbcType=VARCHAR} AND
+			team_num = #{teamNum, jdbcType=INTEGER}
+	</select>
+
+	<select id="search" resultType="com.example.demo.entity.TeamEntity" parameterType="int">
+		SELECT
+			id,
+			name,
+			team_num
+		FROM
+			team
+		WHERE
+			championship_id = #{championshipId, jdbcType=INTEGER}
+	</select>
+
+	<delete id="delete" parameterType="com.example.demo.controller.dto.ChampionshipDto">
+		DELETE
+			t
+		FROM
+			team AS t
+		INNER JOIN
+			championship AS c
+		ON
+			t.championship_id = c.id
+		WHERE
+			c.organizer_id = #{organizerId, jdbcType=INTEGER}
+		AND
+			championship_id = #{championshipId, jdbcType=INTEGER}
+	</delete>
+</mapper>
+

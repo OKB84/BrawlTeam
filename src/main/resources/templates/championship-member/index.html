@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="./layout/fragments :: head('メンバー一覧', ~{::link}, ~{})">
+<link href="/css/championship-member/index.css" rel="stylesheet">
+</head>
+<body>
+	<div id="app" class="container-fluid">
+
+        <!-- Sidebar  -->
+		<div th:insert="./layout/fragments :: sidebar('member', 'index')"></div>
+
+        <div id="content">
+  			<div th:insert="./layout/fragments :: navbar('メンバー一覧')"></div>
+
+			<div class="row">
+				<div class="offset-xl-2 col-xl-8 offset-lg-1 col-lg-10">
+					<table class="table table-hover member-list">
+						<thead>
+							<tr>
+								<th>名前</th>
+								<th>トロフィー数</th>
+								<th>キャラクター数</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="player in getPlayerList" :key="player.playerTag">
+								<td @click="showDetail(player.playerTag)">{{player.name}}</td>
+								<td @click="showDetail(player.playerTag)" class="td-right">{{player.trophies}}</td>
+								<td @click="showDetail(player.playerTag)" class="td-right">{{player.numOfBrawler}}</td>
+								<td>
+									<button :disabled="!Object.keys(player).length" @click="deleteMember(player.playerTag)" class="btn btn-danger delete-member">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<paginate
+						:page-count="getPageCount"
+						:page-range="3"
+						:margin-pages="2"
+						:click-handler="clickCallback"
+						:prev-text="'＜'"
+						:next-text="'＞'"
+						:container-class="'pagination'"
+						:containerClass="'pagination'"
+						:page-class="'page-item'"
+						:page-link-class="'page-link'"
+						:prev-class="'page-item'"
+						:prev-link-class="'page-link'"
+						:next-class="'page-item'"
+						:next-link-class="'page-link'">
+					</paginate>
+				</div>
+			</div>
+			<div class="addbtn-area">
+				<button @click="showModalAdd=true" class="btn btn-app"><i class="fas fa-user-plus"></i> メンバーを追加</button>
+			</div>
+		</div>
+		<transition name="fade">
+			<div v-if="showModalDetail">
+				<div class="modal" @click.self="showModalDetail=false">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">メンバー詳細</h4>
+								<button type="button" class="close" @click="showModalDetail=false">×</button>
+							</div>
+							<div class="modal-body">
+								<div class="d-flex flex-column overflow-auto">
+									<div th:insert="./layout/fragments :: playerDetail('hideHeader')"></div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button @click="deleteMember(playerDetail.playerTag)" class="btn btn-danger"><i class="fas fa-trash-alt"></i> 削除</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-backdrop show"></div>
+			</div>
+			<div v-if="showModalAdd">
+				<div class="modal" @click.self="showModalAdd=false">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">メンバー追加</h4>
+								<button type="button" class="close" @click="showModalAdd=false">×</button>
+							</div>
+							<div class="modal-body">
+								<div class="d-flex flex-column overflow-auto">
+									<p>追加したいメンバーのプレイヤータグの<span class="stress-char">「#」以降の英数字</span>を入力してください。</p>
+									<div class="add-forms">
+										<p class="has-error-p">{{ playerTagError }}</p>
+										<span># </span><input type="text" id="playerTag" name="playerTag" v-model="playerTag" v-bind:class="{ 'has-error': playerTagError }">
+										<button type="button" @click="addMember" class="btn btn-danger add-btn"><i class="fas fa-plus"></i> 追加</button>
+									</div>
+									<p>※クラブに所属している場合は、クラブメンバーをインポート（一括追加）することができます。</p>
+									<div class="import-btn-area">
+										<p class="has-error-p">{{ importError }}</p>
+										<button type="button" @click="importFromClub" class="btn btn-secondary"><i class="fas fa-user-friends"></i> クラブメンバーをインポート</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-backdrop show"></div>
+			</div>
+		</transition>
+		<div th:insert="./layout/fragments :: modalUpdating"></div>
+	</div>
+	<script src="https://unpkg.com/vuejs-paginate@2.1.0"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+	<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+	<script type="text/javascript" src="/js/championship-member/index.js"></script>
+</body>
+</html>

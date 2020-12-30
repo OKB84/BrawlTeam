@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="./layout/fragments :: head('メンバー一覧', ~{::link}, ~{})">
+<link href="/css/championship-member/create.css" rel="stylesheet">
+</head>
+<body>
+	<div id="app" class="container-fluid">
+    	<!-- Sidebar  -->
+		<div th:insert="./layout/fragments :: sidebar('member', 'create')"></div>
+
+       	<div id="content">
+ 			<div th:insert="./layout/fragments :: navbar('メンバー追加')"></div>
+
+			<div class="row">
+				<div class="offset-xl-4 col-xl-4 offset-lg-3 col-lg-6 offset-md-2 col-md-8 offset-sm-1 col-sm-10">
+					<p>追加したいメンバーのプレイヤータグの<span class="stress-char">「#」以降の英数字</span>を入力してください。</p>
+					<div class="add-forms">
+						<p class="has-error-p">{{ playerTagError }}</p>
+						<span># </span><input type="text" id="playerTag" name="playerTag" v-model="playerTag" v-bind:class="{ 'has-error': playerTagError }">
+						<button type="button" @click="addMember" class="btn btn-danger add-btn"><i class="fas fa-plus"></i> 追加</button>
+					</div>
+					<p class="small">※<a href="/user/profile" class="account-link">アカウントページ</a>でプレイヤータグを設定済みで、クラブに所属している場合は、クラブメンバーをインポート（一括追加）することができます。</p>
+					<div class="import-btn-area">
+						<p class="has-error-p">{{ importError }}</p>
+						<button type="button" v-bind:disabled="!isImportActive" @click="importFromClub" class="btn btn-secondary"><i class="fas fa-user-friends"></i> クラブメンバーをインポート</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:insert="./layout/fragments :: modalUpdating"></div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script type="text/javascript" src="/js/championship-member/create.js"></script>
+</body>
+</html>

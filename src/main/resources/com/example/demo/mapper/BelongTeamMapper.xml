@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.BelongTeamMapper">
+
+	<insert id="create" parameterType="com.example.demo.entity.BelongTeamEntity">
+		INSERT INTO belong_team (
+			team_id,
+			player_tag
+		) VALUES (
+			#{teamId, jdbcType=INTEGER},
+			#{playerTag, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="search" resultType="com.example.demo.controller.dto.ChampionshipMemberDto" parameterType="int">
+		SELECT
+			p.name,
+			p.player_tag,
+			t.team_num,
+			p.trophies,
+			count(o.brawler_id) AS num_of_brawler
+		FROM
+			player AS p
+		INNER JOIN
+			belong_team AS b
+		ON
+			p.player_tag = b.player_tag
+		INNER JOIN
+			team AS t
+		ON
+			b.team_id = t.id
+		INNER JOIN
+			own_brawler AS o
+		ON
+			p.player_tag = o.player_tag
+		WHERE
+			team_id = #{teamId, jdbcType=INTEGER}
+		GROUP BY
+			p.name, p.player_tag
+	</select>
+</mapper>
+

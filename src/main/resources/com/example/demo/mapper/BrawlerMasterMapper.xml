@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.BrawlerMasterMapper">
+
+	<!-- 存在しないBrawlerの情報に限りレコードを新規作成する -->
+	<insert id="create" parameterType="com.example.demo.entity.BrawlerMasterEntity">
+		INSERT INTO brawler_master (
+			id,
+			name
+		)
+		SELECT
+			#{id, jdbcType=INTEGER},
+			#{name, jdbcType=VARCHAR}
+		FROM
+			dual
+		WHERE NOT EXISTS (
+			SELECT
+				id
+			FROM
+				brawler_master
+			WHERE
+				id = #{id, jdbcType=INTEGER}
+			AND
+				name = #{name, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="search" resultType="com.example.demo.entity.BrawlerMasterEntity" parameterType="string">
+		SELECT
+			id,
+			name
+		FROM
+			brawler_master
+		WHERE
+			id = #{id, jdbcType=INTEGER}
+	</select>
+
+</mapper>
+

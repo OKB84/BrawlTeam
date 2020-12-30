@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.OwnBrawlerMapper">
+
+	<!-- 同じ組み合わせのレコードが存在しない場合のみレコード作成 -->
+	<insert id="create" parameterType="com.example.demo.entity.OwnBrawlerEntity">
+		INSERT INTO own_brawler (
+			player_tag,
+			brawler_id,
+			`rank`,
+			trophies,
+			highest_trophies,
+			power
+		)
+		SELECT
+			#{playerTag, jdbcType=VARCHAR},
+			#{brawlerId, jdbcType=INTEGER},
+			#{rank, jdbcType=INTEGER},
+			#{trophies, jdbcType=INTEGER},
+			#{highestTrophies, jdbcType=INTEGER},
+			#{power, jdbcType=INTEGER}
+		FROM
+			dual
+		WHERE NOT EXISTS (
+			SELECT
+				player_tag
+			FROM
+				own_brawler
+			WHERE
+				player_tag = #{playerTag, jdbcType=VARCHAR}
+			AND
+				brawler_id = #{brawlerId, jdbcType=INTEGER}
+		)
+	</insert>
+
+	<select id="search" resultType="string" parameterType="string">
+		SELECT
+			brawler_id
+		FROM
+			own_brawler
+		WHERE
+			player_tag = #{playerTag, jdbcType=VARCHAR}
+	</select>
+
+</mapper>
+

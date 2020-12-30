@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.PlayerMapper">
+
+	<!-- すでに登録済みのプレイヤータグの場合は、名前、トロフィー、クラブタグをアップデート -->
+	<insert id="createOnDuplicateKeyUpdate" parameterType="com.example.demo.entity.PlayerEntity">
+		INSERT INTO player (
+			player_tag,
+			name,
+			trophies,
+			exp_level,
+			exp_points,
+			highest_trophies,
+			power_play_points,
+			highest_power_play_points,
+			solo_victories,
+			duo_victories,
+			best_robo_rumble_time,
+			best_time_as_big_brawler,
+			club_tag
+		) VALUES (
+			#{playerTag, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{trophies, jdbcType=INTEGER},
+			#{expLevel, jdbcType=INTEGER},
+			#{expPoints, jdbcType=INTEGER},
+			#{highestTrophies, jdbcType=INTEGER},
+			#{powerPlayPoints, jdbcType=INTEGER},
+			#{highestPowerPlayPoints, jdbcType=INTEGER},
+			#{soloVictories, jdbcType=INTEGER},
+			#{duoVictories, jdbcType=INTEGER},
+			#{bestRoboRumbleTime, jdbcType=INTEGER},
+			#{bestTimeAsBigBrawler, jdbcType=INTEGER},
+			#{clubTag, jdbcType=VARCHAR}
+		) ON DUPLICATE KEY UPDATE
+			name = #{name, jdbcType=VARCHAR},
+			trophies = #{trophies, jdbcType=INTEGER},
+			exp_level = #{expLevel, jdbcType=INTEGER},
+			exp_points = #{expPoints, jdbcType=INTEGER},
+			highest_trophies = #{highestTrophies, jdbcType=INTEGER},
+			power_play_points = #{powerPlayPoints, jdbcType=INTEGER},
+			highest_power_play_points = #{highestPowerPlayPoints, jdbcType=INTEGER},
+			solo_victories = #{soloVictories, jdbcType=INTEGER},
+			duo_victories = #{duoVictories, jdbcType=INTEGER},
+			best_robo_rumble_time = #{bestRoboRumbleTime, jdbcType=INTEGER},
+			best_time_as_big_brawler = #{bestTimeAsBigBrawler, jdbcType=INTEGER},
+			club_tag = #{clubTag, jdbcType=VARCHAR}
+	</insert>
+
+	<select id="getMembersPlayerInfo" resultType="com.example.demo.controller.dto.ChampionshipMemberDto" parameterType="int">
+		SELECT
+			p.name,
+			p.player_tag,
+			p.trophies,
+			count(o.brawler_id) AS num_of_brawler
+		FROM
+			player AS p
+		INNER JOIN
+			own_brawler AS o
+		ON
+			p.player_tag = o.player_tag
+		WHERE
+			p.player_tag IN (
+				SELECT
+					member_player_tag
+				FROM
+					championship_member
+				WHERE
+					user_id = #{userId, jdbcType=INTEGER}
+			)
+		GROUP BY
+			p.name, p.player_tag
+		ORDER BY
+			p.trophies DESC
+	</select>
+
+<!-- クラブ内のプレイヤーのみで大会開催という仕様を想定していた時の実装 -->
+<!-- 	<select id="getCurrentClubPlayerTag" resultType="string" parameterType="string">
+		SELECT
+			player_tag
+		FROM
+			player
+		WHERE
+			club_tag = #{clubTag, jdbcType=VARCHAR}
+	</select> -->
+
+	<update id="update" parameterType="com.example.demo.entity.PlayerEntity">
+		UPDATE
+			player
+		SET
+			name = #{name, jdbcType=VARCHAR},
+			trophies = #{trophies, jdbcType=INTEGER},
+			club_tag = #{clubTag, jdbcType=VARCHAR}
+		WHERE
+			player_tag = #{playerTag, jdbcType=VARCHAR}
+	</update>
+
+	<select id="searchByPlayerTag" resultType="com.example.demo.entity.PlayerEntity" parameterType="string">
+		SELECT
+			player_tag,
+			name,
+			trophies,
+			club_tag,
+			created_at,
+			updated_at
+		FROM
+			player
+		WHERE
+			player_tag = #{playerTag, jdbcType=VARCHAR}
+	</select>
+
+	<select id="getPlayerDetail" resultType="com.example.demo.controller.dto.PlayerDetailDto"  parameterType="string">
+		SELECT
+			p.name,
+			p.trophies,
+			p.highest_trophies,
+			p.power_play_points,
+			p.highest_power_play_points,
+			p.solo_victories,
+			p.duo_victories,
+			count(o.brawler_id) AS num_of_brawler,
+			p.highest_trophies DIV count(o.brawler_id) AS avg_tro_all_brawlers,
+			TRUNCATE(AVG(CASE WHEN b.type = '1' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range,
+			TRUNCATE(AVG(CASE WHEN b.type = '2' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range_sup_heavy,
+			TRUNCATE(AVG(CASE WHEN b.type = '3' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_mid_range,
+			TRUNCATE(AVG(CASE WHEN b.type = '4' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_mid_range_sup_heavy,
+			TRUNCATE(AVG(CASE WHEN b.type = '5' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_heavy_weight,
+			TRUNCATE(AVG(CASE WHEN b.type = '6' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_semi_heavy_weight,
+			TRUNCATE(AVG(CASE WHEN b.type = '7' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_thrower
+		FROM
+			player AS p
+		INNER JOIN
+			own_brawler AS o
+		ON
+			p.player_tag = o.player_tag
+		INNER JOIN
+			brawler_master AS b
+		ON
+			o.brawler_id = b.id
+		WHERE
+			p.player_tag = #{playerTag, jdbcType=VARCHAR}
+	</select>
+</mapper>
+

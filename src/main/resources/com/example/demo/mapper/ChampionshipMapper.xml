@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ChampionshipMapper">
+
+	<insert id="create" parameterType="com.example.demo.controller.dto.ChampionshipCreateDto">
+		INSERT INTO championship (
+			name,
+			organizer_id,
+			date
+		)
+		VALUES (
+			#{name, jdbcType=VARCHAR},
+			#{organizerId, jdbcType=INTEGER},
+			#{date, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="search" resultType="com.example.demo.entity.ChampionshipEntity" parameterType="int">
+		SELECT
+			id,
+			name,
+			organizer_id,
+			date,
+			created_at,
+			updated_at
+		FROM
+			championship
+		WHERE
+			organizer_id = #{organizerId, jdbcType=INTEGER}
+		ORDER BY
+			date DESC
+	</select>
+
+	<select id="getCreatedId" resultType="int" parameterType="com.example.demo.controller.dto.ChampionshipCreateDto">
+		SELECT
+			id
+		FROM
+			championship
+		WHERE
+			name = #{name, jdbcType=VARCHAR}
+			AND date = #{date, jdbcType=VARCHAR}
+			AND organizer_id = #{organizerId, jdbcType=INTEGER}
+	</select>
+
+	<select id="getDetail" resultType="com.example.demo.controller.dto.ChampionshipDetailDto" parameterType="com.example.demo.controller.dto.ChampionshipCreateDto">
+		SELECT
+			id,
+			name AS championship_name,
+			date
+		FROM
+			championship
+		WHERE
+			id = #{id, jdbcType=INTEGER}
+			AND organizer_id = #{organizerId, jdbcType=INTEGER}
+	</select>
+
+	<update id="update" parameterType="com.example.demo.controller.dto.ChampionshipCreateDto">
+		UPDATE
+			championship
+		SET
+			name = #{name, jdbcType=VARCHAR},
+			date = #{date, jdbcType=VARCHAR}
+		WHERE
+			id = #{id, jdbcType=INTEGER}
+		AND
+			organizer_id = #{organizerId, jdbcType=INTEGER}
+	</update>
+
+	<delete id="delete" parameterType="com.example.demo.controller.dto.ChampionshipDateFormatedDto">
+		DELETE FROM
+			championship
+		WHERE
+			organizer_id = #{organizerId, jdbcType=INTEGER}
+			AND id = #{id, jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteBeforeUpdate" parameterType="com.example.demo.controller.dto.ChampionshipDto">
+		DELETE FROM
+			championship
+		WHERE
+			organizer_id = #{organizerId, jdbcType=INTEGER}
+			AND id = #{id, jdbcType=INTEGER}
+	</delete>
+</mapper>
+

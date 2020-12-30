@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="./layout/fragments :: head('トップページ', ~{::link}, ~{::script})">
+<link href="/css/toppage/index.css" rel="stylesheet">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script type="text/javascript" src="/js/toppage/index.js"></script>
+</head>
+<body>
+	<div class="jumbotron jumbotron-extend">
+		<div class="container-fluid jumbotron-container">
+			<h1 class="site-name wf-quicksand">Brawl Teams β</h1>
+			<button type="button" class="btn btn-black" data-toggle="modal"
+				data-target="#staticBackdrop">
+				<span class="wf-quicksand">Start</span>
+			</button>
+		</div>
+	</div>
+	<div class="modal" id="staticBackdrop" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body">
+					<p class="wf-kosugimaru">ログイン方法を選択してください。</p>
+					<div class="social-login-buttons">
+						<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

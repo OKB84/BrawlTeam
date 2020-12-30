@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="./layout/fragments :: head('大会編集', ~{::link}, ~{})">
+<!-- CSSは新規作成画面のものを流用 -->
+<link href="/css/championship/create.css" rel="stylesheet">
+</head>
+<body>
+	<div id="app" class="container-fluid">
+
+        <!-- Sidebar  -->
+		<div th:insert="./layout/fragments :: sidebar('championship', 'edit')"></div>
+
+        <div id="content">
+  			<div th:insert="./layout/fragments :: navbar('大会編集')"></div>
+  			<div th:insert="./layout/fragments :: championshipForm"></div>
+
+			<div class="submit-fotter">
+				<button type="button" @click="submit" class="btn btn-app"><i class="fas fa-save"></i> 更新</button>
+				<button type="button" onclick="location.href='/championship/index'" class="btn btn-secondary" ><i class="fas fa-times-circle"></i> キャンセル</button>
+			</div>
+		</div>
+  		<div th:insert="./layout/fragments :: modalUpdating"></div>
+	</div>
+
+	<input type="hidden" th:value="${championshipId}" id="championshipId">
+
+	<script src="https://unpkg.com/vuejs-paginate@2.1.0"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+	<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script type="text/javascript" src="/js/championship/edit.js"></script>
+</body>
+</html>

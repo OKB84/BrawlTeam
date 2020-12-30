@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+
+input#date,
+input#time {
+	width: 168px;
+}
+
+input#name {
+	width: calc(100% - 75px);
+	max-width: 400px;
+}
+
+.sync-area {
+	position: relative;
+	height: 70px;
+}
+
+.sync {
+	position: absolute;
+    bottom: 5px;
+    right: 15px;
+    padding: 2px 15px;
+}
+
+.row.basic-info {
+	margin-top: -15px;
+}
+
+.row {
+	margin-bottom: 30px;
+}
+
+th {
+	text-align: center;
+	white-space: nowrap;
+}
+
+table.player-list,
+table.team-list {
+	background-color: #fff;
+}
+
+table.player-detail {
+    margin-top: 3px;
+}
+
+.message-row {
+	border-bottom: 1px solid #ffd5d5;
+}
+
+.message-row td {
+	font-size: 0.8rem;
+	padding-bottom: 0 !important;
+}
+
+.basic-info .has-error-p {
+    padding-left: 70px;
+}
+
+.has-error-p {
+	color: red;
+	font-size: 0.8rem;
+	margin-bottom: 0.2rem;
+}
+
+.basic-info-row {
+	margin-bottom: 15px;
+}
+
+.has-error {
+	background-color: #ffd5d5;
+}
+
+.team-num {
+	text-align: center;
+}
+
+.team-name {
+	width: 100%;
+    min-width: 150px;
+}
+
+.pagination {
+   justify-content: center;
+}
+
+.pagination > li > a {
+    background-color: #fff;
+    color: #2a2a2a;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover {
+    color: #2a2a2a;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > .active > a {
+    color: #2a2a2a !important;
+    background-color: #ffd89e !important;
+    border: solid 1px #ffd89e !important;
+}
+
+.pagination > .active > a:hover {
+    background-color: #ffd89e;
+    border: solid 1px #ffd89e;
+}
+
+#radarChart {
+	max-width: 600px;
+	max-height: 300px;
+}
+
+.submit-fotter {
+	text-align: center;
+	margin-bottom: 50px;
+}
+
+button.btn-app {
+	padding: .375rem 20px;
+}
+
+.modal {
+  display: block;
+}
+
+/* vueのtransitionを使うため */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .15s;
+}
+
+/* vueのtransitionを使うため */
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}

@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+@import "https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Quicksand:300,400,500,600,700";
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+.jumbotron-extend {
+    position: relative;
+    height: 100vh;
+    min-height: 300px;
+    width: 100%;
+    background-image: url(/images/toppage.jpg);    /* 背景画像指定 */
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.jumbotron-extend::before{
+	content: ' ';
+	background-color: rgba(0,0,0,.1);
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.jumbotron-container {
+	padding-left: 10%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.site-name {
+    font-family: 'Quicksand', sans-serif;
+    margin-bottom: 40px;
+}
+
+.btn-black {
+    border-radius: 0;
+    padding: 0.3rem 1.4rem;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Avenir', serif;
+}
+.btn-black:hover {
+     background-color: #fff;
+     color: #000;
+}
+
+.modal-content {
+	height: 10rem;
+	background-color: #fafafa;
+}
+
+.abcRioButton {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.g-signin2 {
+	padding-top: 1rem;
+}

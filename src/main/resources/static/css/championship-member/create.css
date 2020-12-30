@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+
+/* 表示/非表示はvueで制御するので最初から表示状態にする */
+.modal {
+	display: block;
+}
+
+/* vueのtransitionを使うため */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .15s;
+}
+
+/* vueのtransitionを使うため */
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.stress-char {
+	color: red;
+	text-decoration: underline;
+}
+
+.account-link {
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+p.small {
+	font-size: 0.8rem;
+}
+
+.has-error {
+	background-color: #ffd5d5;
+}
+
+.has-error-p {
+	color: red;
+	font-size: 0.8rem;
+	margin-bottom: 0.2rem;
+    margin-left: 17px;
+}
+
+.add-forms {
+	margin-bottom: 30px;
+}
+
+.add-btn {
+	height: 30px;
+	vertical-align: initial;
+	padding: 1px 6px;
+	margin-left: 8px;
+}
+
+.import-btn-area {
+	text-align: center;
+}
+
+.import-btn-area button {
+	margin-bottom: 20px;
+}

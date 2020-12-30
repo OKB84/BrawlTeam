@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<head th:replace="./layout/fragments :: head('大会一覧', ~{::link}, ~{})">
+<link href="/css/championship/index.css" rel="stylesheet">
+</head>
+<body>
+	<div id="app" class="container-fluid">
+
+        <!-- Sidebar  -->
+		<div th:insert="./layout/fragments :: sidebar('championship', 'index')"></div>
+
+        <!-- Page Content  -->
+        <div id="content">
+  			<div th:insert="./layout/fragments :: navbar('大会一覧')"></div>
+
+			<div class="row">
+				<div class="offset-xl-2 col-xl-8 offset-lg-1 col-lg-10">
+					<table class="table table-hover championship-list">
+						<thead>
+							<tr>
+								<th>開催日時</th>
+								<th>大会名</th>
+								<th><button @click="deleteChampionship()" class="btn btn-danger delete-championship"><i class="fas fa-trash-alt"></i></button></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="championship in getChampionshipList" :key="championship.id" :class="{ selected : championship.checked === true }">
+								<td @click="show(championship.id)">{{ championship.date }}</td>
+								<td @click="show(championship.id)">{{ championship.name }}</td>
+								<td><input :disabled="!Object.keys(championship).length" type="checkbox" v-model="championship.checked"></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<paginate
+						:page-count="getPageCount"
+						:page-range="3"
+						:margin-pages="2"
+						:click-handler="clickCallback"
+						:prev-text="'＜'"
+						:next-text="'＞'"
+						:container-class="'pagination'"
+						:containerClass="'pagination'"
+						:page-class="'page-item'"
+						:page-link-class="'page-link'"
+						:prev-class="'page-item'"
+						:prev-link-class="'page-link'"
+						:next-class="'page-item'"
+						:next-link-class="'page-link'">
+					</paginate>
+				</div>
+			</div>
+        </div>
+		<transition name="fade">
+			<div v-if="showModal">
+				<div class="modal" @click.self="showModal=false">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">{{ championshipDetail.dateStr + ' ' + championshipDetail.championshipName }}</h4>
+								<button type="button" class="close" @click="showModal=false">×</button>
+							</div>
+							<div class="modal-body">
+								<div class="d-flex flex-column overflow-auto">
+									<template v-for="(team, index) in championshipDetail.teamList">
+									    <div v-if="team">
+									        <div class="card card-block h-150">
+												<table class="table">
+													<tr class="card-header">
+														<th>チーム番号</th>
+														<td>{{ team.teamNum }}</td>
+													</tr>
+													<tr>
+														<th>チーム名</th>
+														<td>{{ team.teamName }}</td>
+													</tr>
+													<tr v-for="(member, i) in team.memberList" class="card-body">
+														<th>メンバー{{ i + 1 }}</th>
+														<td>{{ member.name }}</td>
+													</tr>
+												</table>
+									        </div>
+									    </div>
+									</template>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button @click="moveToEdit(championshipDetail.id)" type="button" class="btn btn-secondary"><i class="fas fa-edit"></i> 編集</button>
+								<button @click="deleteChampionship(championshipDetail.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i> 削除</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-backdrop show"></div>
+			</div>
+		</transition>
+	</div>
+
+	<!-- Vue js関係はheadタグ内でテンプレートに渡そうとすると正しく動作しなかった -->
+	<script src="https://unpkg.com/vuejs-paginate@2.1.0"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script type="text/javascript" src="/js/championship/index.js"></script>
+</body>
+</html>

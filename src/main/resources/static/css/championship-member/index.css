@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+
+table.member-list {
+	background-color: #fff;
+}
+
+th {
+	text-align: center;
+}
+
+button.delete-member {
+	padding: 1px 6px;
+}
+
+.addbtn-area {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 50px;
+}
+
+.pagination {
+   justify-content: center;
+}
+
+.pagination > li > a {
+    background-color: #fff;
+    color: #2a2a2a;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover {
+    color: #2a2a2a;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > .active > a {
+    color: #2a2a2a !important;
+    background-color: #ffd89e !important;
+    border: solid 1px #ffd89e !important;
+}
+
+.pagination > .active > a:hover {
+    background-color: #ffd89e;
+    border: solid 1px #ffd89e;
+}
+
+/* 表示/非表示はvueで制御するので最初から表示状態にする */
+.modal {
+	display: block;
+}
+
+/* vueのtransitionを使うため */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .15s;
+}
+
+/* vueのtransitionを使うため */
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.stress-char {
+	color: red;
+	text-decoration: underline;
+}
+
+.has-error {
+	background-color: #ffd5d5;
+}
+
+.has-error-p {
+	color: red;
+	font-size: 0.8rem;
+	margin-bottom: 0.2rem;
+    margin-left: 17px;
+}
+
+.add-forms {
+	margin-bottom: 30px;
+}
+
+.add-btn {
+	height: 30px;
+	vertical-align: initial;
+	padding: 1px 6px;
+	margin-left: 8px;
+}
+
+.import-btn-area {
+	text-align: center;
+}
+
+.import-btn-area button {
+	margin-bottom: 20px;
+}
