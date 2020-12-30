@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.Proxy.Type;
+import java.net.Authenticator;
+import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -43,13 +43,21 @@ public class BrawlStarsAPIService {
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 
 		    // APIがIPの指定を必要とするため固定IPから通信
-		    final String proxyHost = System.getenv("PROXY_HOST"); // プロキシホスト
-		    final int proxyPort = 9293; // プロキシポート番号
+	        URL proxyUrl = new URL(System.getenv("QUOTAGUARDSTATIC_URL"));
+	        String userInfo = proxyUrl.getUserInfo();
+	        String user = userInfo.substring(0, userInfo.indexOf(':'));
+	        String password = userInfo.substring(userInfo.indexOf(':') + 1);
 
-		    SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-		    factory.setProxy(new Proxy(Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
+	        System.setProperty("http.proxyHost", proxyUrl.getHost());
+	        System.setProperty("http.proxyPort", Integer.toString(proxyUrl.getPort()));
 
-		    RestTemplate restTemplate = new RestTemplate(factory);
+	        Authenticator.setDefault(new Authenticator() {
+	                protected PasswordAuthentication getPasswordAuthentication() {
+	                    return new PasswordAuthentication(user, password.toCharArray());
+	                }
+	            });
+
+		    RestTemplate restTemplate = new RestTemplate();
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, PlayerInfoDto.class
@@ -57,7 +65,7 @@ public class BrawlStarsAPIService {
 		    System.out.println(res.getBody());
 		    return res.getBody();
 
-		} catch (HttpClientErrorException e) {
+		} catch (HttpClientErrorException | MalformedURLException e) {
 
 			// playerTagに該当するプレイヤーが見つからなかった場合
 			e.printStackTrace();
