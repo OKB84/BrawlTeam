@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
@@ -78,7 +79,7 @@ public class ChampionshipService {
 		for (ChampionshipEntity entity : championshipMapper.search(userId)) {
 
 			ChampionshipDateFormatedDto dto = new ChampionshipDateFormatedDto();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/M/d (E) HH:mm");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/M/d (E) HH:mm", Locale.JAPANESE);
 
 			dto.setId(entity.getId());
 			dto.setName(entity.getName());
@@ -103,7 +104,7 @@ public class ChampionshipService {
 		List<ChampionshipDetailDto> list = championshipMapper.getDetail(championshipCreateDto);
 
 		for (ChampionshipDetailDto dto : list) {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("M/d (E)");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("M/d (E)", Locale.JAPANESE);
 			dto.setDateStr(dateFormat.format(dto.getDate()));
 		}
 
