@@ -144,7 +144,7 @@ var app = new Vue({
 				})
 				.then(data => {
 					// 基本情報をフォームに受け渡し
-					const convertedDate = new Date(new Date(data.date).toLocaleString({ timeZone: 'Asia/Tokyo' }));
+					const convertedDate = new Date(new Date(data.date).toLocaleString({ timeZone: 'UTC' }));
 					const year = convertedDate.getFullYear();
 					const month = ("0"+(convertedDate.getMonth() + 1)).slice(-2);	// 0埋めを行う
 					const date = ("0"+(convertedDate.getDate())).slice(-2);			// 0埋めを行う
