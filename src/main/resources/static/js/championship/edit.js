@@ -144,7 +144,7 @@ var app = new Vue({
 				})
 				.then(data => {
 					// 基本情報をフォームに受け渡し
-					const convertedDate = new Date(new Date(data.date) + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000) );
+					const convertedDate = new Date(new Date(data.date) + new Date().getTimezoneOffset());
 					const year = convertedDate.getFullYear();
 					const month = ("0"+(convertedDate.getMonth() + 1)).slice(-2);	// 0埋めを行う
 					const date = ("0"+(convertedDate.getDate())).slice(-2);			// 0埋めを行う
