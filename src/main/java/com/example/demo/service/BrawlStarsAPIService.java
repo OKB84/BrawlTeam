@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +35,9 @@ public class BrawlStarsAPIService {
 	// アクセスに必要な当システムのAPIキー
 	public static final String API_KEY = System.getenv("BRAWL_STARS_API_KEY");
 
+	// 環境（本番または開発）
+	public static final String SPRING_PROFILES_ACTIVE = System.getenv("SPRING_PROFILES_ACTIVE");
+
 	// プレイヤータグからプレイヤー情報を取得（１件のみ）
 	public PlayerInfoDto getPlayerInfo(String playerTag) {
 
@@ -45,7 +49,11 @@ public class BrawlStarsAPIService {
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 
 		    RestTemplate restTemplate = new RestTemplate();
-		    config.customize(restTemplate);		// 本番環境での固定IP利用のため
+
+		    if (!StringUtils.equals(SPRING_PROFILES_ACTIVE, "development")) {
+			    config.customize(restTemplate);		// 本番環境では固定IPを利用
+		    }
+
 		    ResponseEntity<PlayerInfoDto> res = restTemplate.exchange(
 		    	BASE_URL + "players/" + playerTag,		// プレイヤータグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, PlayerInfoDto.class
@@ -100,7 +108,11 @@ public class BrawlStarsAPIService {
 		    headers.add("Accept", "application/json");
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 		    RestTemplate restTemplate = new RestTemplate();
-		    config.customize(restTemplate);		// 本番環境での固定IP利用のため
+
+		    if (StringUtils.equals(SPRING_PROFILES_ACTIVE, "production")) {
+			    config.customize(restTemplate);		// 本番環境では固定IPを利用
+		    }
+
 		    ResponseEntity<ClubPlayerAPIDto> res = restTemplate.exchange(
 		    	BASE_URL + "clubs/" + clubTag + "/members",		// クラブタグのシャープはパーセントにしないとエラーになる
 		    	HttpMethod.GET, req, ClubPlayerAPIDto.class
