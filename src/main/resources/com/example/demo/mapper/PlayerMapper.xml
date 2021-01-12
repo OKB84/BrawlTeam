@@ -122,7 +122,7 @@
 			p.solo_victories,
 			p.duo_victories,
 			count(o.brawler_id) AS num_of_brawler,
-			p.highest_trophies DIV count(o.brawler_id) AS avg_tro_all_brawlers,
+			AVG(o.highest_trophies) AS avg_tro_all_brawlers,
 			TRUNCATE(AVG(CASE WHEN b.type = '1' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range,
 			TRUNCATE(AVG(CASE WHEN b.type = '2' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range_sup_heavy,
 			TRUNCATE(AVG(CASE WHEN b.type = '3' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_mid_range,
