@@ -55,13 +55,30 @@
 			p.name,
 			p.player_tag,
 			p.trophies,
-			count(o.brawler_id) AS num_of_brawler
+			p.highest_trophies,
+			p.power_play_points,
+			p.highest_power_play_points,
+			p.solo_victories,
+			p.duo_victories,
+			count(o.brawler_id) AS num_of_brawler,
+			AVG(o.highest_trophies) AS avg_tro_all_brawlers,
+			TRUNCATE(AVG(CASE WHEN b.type = '1' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range,
+			TRUNCATE(AVG(CASE WHEN b.type = '2' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range_sup_heavy,
+			TRUNCATE(AVG(CASE WHEN b.type = '3' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_mid_range,
+			TRUNCATE(AVG(CASE WHEN b.type = '4' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_mid_range_sup_heavy,
+			TRUNCATE(AVG(CASE WHEN b.type = '5' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_heavy_weight,
+			TRUNCATE(AVG(CASE WHEN b.type = '6' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_semi_heavy_weight,
+			TRUNCATE(AVG(CASE WHEN b.type = '7' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_thrower
 		FROM
 			player AS p
 		INNER JOIN
 			own_brawler AS o
 		ON
 			p.player_tag = o.player_tag
+		INNER JOIN
+			brawler_master AS b
+		ON
+			o.brawler_id = b.id
 		WHERE
 			p.player_tag IN (
 				SELECT

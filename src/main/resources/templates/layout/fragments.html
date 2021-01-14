@@ -196,13 +196,23 @@
 				<table class="table table-sm team-list">
 					<thead>
 						<tr>
-							<th>チームNo.</th>
-							<th>チーム名</th>
-							<th>トロフィー数</th>
-							<th>キャラクター数</th>
-							<th>メンバー1</th>
-							<th>メンバー2</th>
-							<th>メンバー3</th>
+							<th class="joined-header" rowspan="2">チームNo.</th>
+							<th class="joined-header" rowspan="2">チーム名</th>
+							<th class="joined-header" rowspan="2">メンバー1</th>
+							<th class="joined-header" rowspan="2">メンバー2</th>
+							<th class="joined-header" rowspan="2">メンバー3</th>
+							<th class="joined-header" rowspan="2">キャラクター数</th>
+							<th class="joined-header" rowspan="2">総トロフィー数</th>
+							<th colspan="7">平均最多トロフィー数</th>
+						</tr>
+						<tr>
+							<th>&nbsp;&nbsp;長距離&nbsp;&nbsp;</th>
+							<th>長タンクメタ</th>
+							<th>&nbsp;&nbsp;中距離&nbsp;&nbsp;</th>
+							<th>中タンクメタ</th>
+							<th>&nbsp;&nbsp;タンク&nbsp;&nbsp;</th>
+							<th>セミタンク高起動</th>
+							<th>スローワー</th>
 						</tr>
 					</thead>
 					<div></div>
@@ -215,11 +225,18 @@
 							<tr v-bind:class="{ 'has-error': team.message }">
 								<td class="team-num">{{ team.teamNum }}</td>
 								<td><input type="text" v-model="team.name" class="team-name"></td>
-								<td class="td-right">{{ team.trophies }}</td>
-								<td class="td-right">{{ team.numOfBrawler }}</td>
 								<td>{{ team.member[0] ? team.member[0].name : '' }}</td>
 								<td>{{ team.member[1] ? team.member[1].name : '' }}</td>
 								<td>{{ team.member[2] ? team.member[2].name : '' }}</td>
+								<td class="td-right">{{ team.numOfBrawler }}</td>
+								<td class="td-right">{{ team.trophies }}</td>
+								<td class="td-right">{{ team.avgTroLongRange }}</td>
+								<td class="td-right">{{ team.avgTroLongRangeSupHeavy }}</td>
+								<td class="td-right">{{ team.avgTroMidRange }}</td>
+								<td class="td-right">{{ team.avgTroMidRangeSupHeavy }}</td>
+								<td class="td-right">{{ team.avgTroHeavyWeight }}</td>
+								<td class="td-right">{{ team.avgTroSemiHeavyWeight }}</td>
+								<td class="td-right">{{ team.avgTroThrower }}</td>
 							</tr>
 						</template>
 					</tbody>

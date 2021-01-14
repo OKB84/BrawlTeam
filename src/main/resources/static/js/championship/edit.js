@@ -22,8 +22,8 @@ var app = new Vue({
 		playerDetail: {},			// プレイヤー詳細情報
 		chartLoaded: true,			// レーダーチャートの表示切り替え
 		chartMaxValue: 100,			// レーダーチャートの最大値
-		showModal: false,			// API通信中のモーダル表示切り替え
-		modalMessage: ''			// API通信中のモーダル中のメッセージ
+		showUpdatingModal: false,			// API通信中のモーダル表示切り替え
+		modalUpdatingMessage: ''			// API通信中のモーダル中のメッセージ
 	},
 	computed: {
 		// 参加可能プレイヤー数算出
@@ -80,7 +80,15 @@ var app = new Vue({
 							'name' : '',
 							'member' : [],
 							'trophies' : 0,
-							'numOfBrawler' : 0
+							'numOfBrawler' : 0,
+							'avgTroAllBrawlers': 0,
+							'avgTroLongRange': 0,
+							'avgTroLongRangeSupHeavy': 0,
+							'avgTroMidRange': 0,
+							'avgTroMidRangeSupHeavy': 0,
+							'avgTroHeavyWeight': 0,
+							'avgTroSemiHeavyWeight': 0,
+							'avgTroThrower': 0
 						});
 					}
 				}
@@ -177,10 +185,26 @@ var app = new Vue({
 
 						let sumOfTrophies = 0;
 						let sumOfNumOfBrawler = 0;
+						let sumOfAvgTroAllBrawlers = 0;
+						let sumOfAvgTroLongRange = 0;
+						let sumOfAvgTroLongRangeSupHeavy = 0;
+						let sumOfAvgTroMidRange = 0;
+						let sumOfAvgTroMidRangeSupHeavy = 0;
+						let sumOfAvgTroHeavyWeight = 0;
+						let sumOfAvgTroSemiHeavyWeight = 0;
+						let sumOfAvgTroThrower = 0;
 
 						team.memberList.forEach(member =>{
 							sumOfTrophies += member.trophies;
 							sumOfNumOfBrawler += member.numOfBrawler;
+							sumOfAvgTroAllBrawlers += member.avgTroAllBrawlers;
+							sumOfAvgTroLongRange += member.avgTroLongRange;
+							sumOfAvgTroLongRangeSupHeavy += member.avgTroLongRangeSupHeavy;
+							sumOfAvgTroMidRange += member.avgTroMidRange;
+							sumOfAvgTroMidRangeSupHeavy += member.avgTroMidRangeSupHeavy;
+							sumOfAvgTroHeavyWeight += member.avgTroHeavyWeight;
+							sumOfAvgTroSemiHeavyWeight += member.avgTroSemiHeavyWeight;
+							sumOfAvgTroThrower += member.avgTroThrower;
 						})
 
 						this.teamList.push({
@@ -188,7 +212,15 @@ var app = new Vue({
 							'name' : team.teamName,
 							'member' : team.memberList,
 							'trophies' : sumOfTrophies,
-							'numOfBrawler' : sumOfNumOfBrawler
+							'numOfBrawler' : sumOfNumOfBrawler,
+							'avgTroAllBrawlers': sumOfAvgTroAllBrawlers,
+							'avgTroLongRange': sumOfAvgTroLongRange,
+							'avgTroLongRangeSupHeavy': sumOfAvgTroLongRangeSupHeavy,
+							'avgTroMidRange': sumOfAvgTroMidRange,
+							'avgTroMidRangeSupHeavy': sumOfAvgTroMidRangeSupHeavy,
+							'avgTroHeavyWeight': sumOfAvgTroHeavyWeight,
+							'avgTroSemiHeavyWeight': sumOfAvgTroSemiHeavyWeight,
+							'avgTroThrower': sumOfAvgTroThrower
 						})
 					})
 
@@ -216,6 +248,14 @@ var app = new Vue({
 						// トロフィー数とキャラクター数をマイナス
 						team.trophies -= player.trophies;
 						team.numOfBrawler -= player.numOfBrawler;
+						team.avgTroAllBrawlers -= player.avgTroAllBrawlers;
+						team.avgTroLongRange -= player.avgTroLongRange;
+						team.avgTroLongRangeSupHeavy -= player.avgTroLongRangeSupHeavy;
+						team.avgTroMidRange -= player.avgTroMidRange;
+						team.avgTroMidRangeSupHeavy -= player.avgTroMidRangeSupHeavy;
+						team.avgTroHeavyWeight -= player.avgTroHeavyWeight;
+						team.avgTroSemiHeavyWeight -= player.avgTroSemiHeavyWeight;
+						team.avgTroThrower -= player.avgTroThrower;
 						return false;
 					} else {
 						return true;
@@ -240,7 +280,14 @@ var app = new Vue({
 				this.teamList[teamIndex].member.push(player);
 				this.teamList[teamIndex].trophies += player.trophies;
 				this.teamList[teamIndex].numOfBrawler += player.numOfBrawler;
-
+				this.teamList[teamIndex].avgTroAllBrawlers += player.avgTroAllBrawlers;
+				this.teamList[teamIndex].avgTroLongRange += player.avgTroLongRange;
+				this.teamList[teamIndex].avgTroLongRangeSupHeavy += player.avgTroLongRangeSupHeavy;
+				this.teamList[teamIndex].avgTroMidRange += player.avgTroMidRange;
+				this.teamList[teamIndex].avgTroMidRangeSupHeavy += player.avgTroMidRangeSupHeavy;
+				this.teamList[teamIndex].avgTroHeavyWeight += player.avgTroHeavyWeight;
+				this.teamList[teamIndex].avgTroSemiHeavyWeight += player.avgTroSemiHeavyWeight;
+				this.teamList[teamIndex].avgTroThrower += player.avgTroThrower;
 			}
 		},
 
@@ -255,7 +302,15 @@ var app = new Vue({
 					'name' : '',
 					'member' : [],
 					'trophies' : 0,
-					'numOfBrawler' : 0
+					'numOfBrawler' : 0,
+					'avgTroAllBrawlers': 0,
+					'avgTroLongRange': 0,
+					'avgTroLongRangeSupHeavy': 0,
+					'avgTroMidRange': 0,
+					'avgTroMidRangeSupHeavy': 0,
+					'avgTroHeavyWeight': 0,
+					'avgTroSemiHeavyWeight': 0,
+					'avgTroThrower': 0
 				});
 			}
 		},
@@ -267,7 +322,7 @@ var app = new Vue({
 				return;
 			}
 
-			this.modalMessage = 'プレイヤー情報更新中...';
+			this.modalUpdatingMessage = 'プレイヤー情報更新中...';
 			this.switchShowModal();		// ローディングモーダルを表示
 
 			fetch('/api/member/update')
@@ -278,7 +333,7 @@ var app = new Vue({
 					// playerList内のplayerのteamNumプロパティが初期化されてしまう
 					this.playerList = data;
 
-					this.modalMessage = '更新が完了しました。';
+					this.modalUpdatingMessage = '更新が完了しました。';
 
 					// teamNum初期化に伴ってチームリストも初期化が必要
 					this.initializeTeamList(this.maxNumOfTeam);
@@ -294,7 +349,7 @@ var app = new Vue({
 
 		// モーダル表示切り替え
 		switchShowModal: function() {
-			this.showModal = !this.showModal;
+			this.showUpdatingModal = !this.showUpdatingModal;
 		},
 
 		// POSTリクエスト送信で大会情報を登録（エラーレスポンスの場合はエラーメッセージ表示）

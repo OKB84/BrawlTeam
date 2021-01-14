@@ -64,7 +64,15 @@ var app = new Vue({
 					'name' : '',
 					'member' : [],
 					'trophies' : 0,
-					'numOfBrawler' : 0
+					'numOfBrawler' : 0,
+					'avgTroAllBrawlers': 0,
+					'avgTroLongRange': 0,
+					'avgTroLongRangeSupHeavy': 0,
+					'avgTroMidRange': 0,
+					'avgTroMidRangeSupHeavy': 0,
+					'avgTroHeavyWeight': 0,
+					'avgTroSemiHeavyWeight': 0,
+					'avgTroThrower': 0
 				});
 
 			// 不参加のプレイヤーが増えて最大チーム数が減った場合
@@ -135,6 +143,14 @@ var app = new Vue({
 						// トロフィー数とキャラクター数をマイナス
 						team.trophies -= player.trophies;
 						team.numOfBrawler -= player.numOfBrawler;
+						team.avgTroAllBrawlers -= player.avgTroAllBrawlers;
+						team.avgTroLongRange -= player.avgTroLongRange;
+						team.avgTroLongRangeSupHeavy -= player.avgTroLongRangeSupHeavy;
+						team.avgTroMidRange -= player.avgTroMidRange;
+						team.avgTroMidRangeSupHeavy -= player.avgTroMidRangeSupHeavy;
+						team.avgTroHeavyWeight -= player.avgTroHeavyWeight;
+						team.avgTroSemiHeavyWeight -= player.avgTroSemiHeavyWeight;
+						team.avgTroThrower -= player.avgTroThrower;
 						return false;
 					} else {
 						return true;
@@ -159,7 +175,14 @@ var app = new Vue({
 				this.teamList[teamIndex].member.push(player);
 				this.teamList[teamIndex].trophies += player.trophies;
 				this.teamList[teamIndex].numOfBrawler += player.numOfBrawler;
-
+				this.teamList[teamIndex].avgTroAllBrawlers += player.avgTroAllBrawlers;
+				this.teamList[teamIndex].avgTroLongRange += player.avgTroLongRange;
+				this.teamList[teamIndex].avgTroLongRangeSupHeavy += player.avgTroLongRangeSupHeavy;
+				this.teamList[teamIndex].avgTroMidRange += player.avgTroMidRange;
+				this.teamList[teamIndex].avgTroMidRangeSupHeavy += player.avgTroMidRangeSupHeavy;
+				this.teamList[teamIndex].avgTroHeavyWeight += player.avgTroHeavyWeight;
+				this.teamList[teamIndex].avgTroSemiHeavyWeight += player.avgTroSemiHeavyWeight;
+				this.teamList[teamIndex].avgTroThrower += player.avgTroThrower;
 			}
 		},
 
@@ -174,7 +197,15 @@ var app = new Vue({
 					'name' : '',
 					'member' : [],
 					'trophies' : 0,
-					'numOfBrawler' : 0
+					'numOfBrawler' : 0,
+					'avgTroAllBrawlers': 0,
+					'avgTroLongRange': 0,
+					'avgTroLongRangeSupHeavy': 0,
+					'avgTroMidRange': 0,
+					'avgTroMidRangeSupHeavy': 0,
+					'avgTroHeavyWeight': 0,
+					'avgTroSemiHeavyWeight': 0,
+					'avgTroThrower': 0
 				});
 			}
 		},

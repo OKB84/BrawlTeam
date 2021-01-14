@@ -21,21 +21,33 @@
 			p.player_tag,
 			t.team_num,
 			p.trophies,
-			count(o.brawler_id) AS num_of_brawler
+			count(o.brawler_id) AS num_of_brawler,
+			AVG(o.highest_trophies) AS avg_tro_all_brawlers,
+			TRUNCATE(AVG(CASE WHEN bm.type = '1' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range,
+			TRUNCATE(AVG(CASE WHEN bm.type = '2' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_long_range_sup_heavy,
+			TRUNCATE(AVG(CASE WHEN bm.type = '3' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_mid_range,
+			TRUNCATE(AVG(CASE WHEN bm.type = '4' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_mid_range_sup_heavy,
+			TRUNCATE(AVG(CASE WHEN bm.type = '5' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_heavy_weight,
+			TRUNCATE(AVG(CASE WHEN bm.type = '6' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_semi_heavy_weight,
+			TRUNCATE(AVG(CASE WHEN bm.type = '7' THEN o.highest_trophies ELSE NULL END), 0) AS avg_tro_thrower
 		FROM
 			player AS p
 		INNER JOIN
-			belong_team AS b
+			belong_team AS bt
 		ON
-			p.player_tag = b.player_tag
+			p.player_tag = bt.player_tag
 		INNER JOIN
 			team AS t
 		ON
-			b.team_id = t.id
+			bt.team_id = t.id
 		INNER JOIN
 			own_brawler AS o
 		ON
 			p.player_tag = o.player_tag
+		INNER JOIN
+			brawler_master AS bm
+		ON
+			o.brawler_id = bm.id
 		WHERE
 			team_id = #{teamId, jdbcType=INTEGER}
 		GROUP BY
