@@ -308,7 +308,7 @@ var app = new Vue({
 					this.get3on3Result(data);
 				})
 				.catch(error => {	// その他エラーの場合
-					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
+					alert('勝率の取得に失敗しました。時間を置いて再度お試しください。');
 					console.log(error);
 				});
 		},
