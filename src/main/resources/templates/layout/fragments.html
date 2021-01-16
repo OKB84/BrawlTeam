@@ -113,7 +113,7 @@
 			</tr>
 			<tr>
 				<td>3on3勝率（直近最大25試合）</td>
-				<td class="td-center">{{ playerDetail ? playerDetail.victoryRate : '' }}</td>
+				<td class="td-center">{{ playerDetail ? playerDetail.victoryRate + '%' : '' }}</td>
 			</tr>
 		</table>
 		<canvas v-if="chartLoaded" id="radarChart"></canvas>
