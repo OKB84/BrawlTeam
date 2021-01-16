@@ -122,7 +122,8 @@ var app = new Vue({
 					avgTroMidRangeSupHeavy: 0,
 					avgTroHeavyWeight: 0,
 					avgTroSemiHeavyWeight: 0,
-					avgTroThrower: 0
+					avgTroThrower: 0,
+					victoryRate: '-'
 				}
 				this.displayChart();
 			})
@@ -358,6 +359,7 @@ var app = new Vue({
 			// パーセントはパラメータとして受け取れないため置換して送信
 			fetch('/api/member/show/' + playerTag.replace('%', ''))
 				.then(response => {
+					this.getBattlelogList(playerTag);	// 3on3の勝率を表示
 					this.chartLoaded = true;
 					return response.json();		// Promiseを返す
 				})
@@ -438,7 +440,59 @@ var app = new Vue({
 			    }
 			  }
 			});
+		},
+
+				// バトルログリストを取得
+		getBattlelogList: function(playerTag) {
+
+			fetch('/api/member/battlelog/' + playerTag.replace('%', ''))
+				.then(response => {
+					return response.json();		// Promiseを返す
+				})
+				.then(data => {		// JSONデータ
+					console.log(data)
+					this.get3on3Result(data);
+				})
+				.catch(error => {	// その他エラーの場合
+					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
+					console.log(error);
+				});
+		},
+
+		// バトルログリストから3on3の勝率を算出
+		get3on3Result: function(battlelogList) {
+
+			let battle = 0;		// 3on3のバトル数
+			let victory = 0;	// 3on3の勝利数
+
+			// 3on3のモード
+			const modeList = [
+								"gemGrab",
+								"brawlBall",
+								"siege",
+								"heist",
+								"bounty",
+								"hotZone",
+								"presentPlunder"
+							]
+
+			// バトルログからバトル数及び勝利数を計算
+			for (battlelog of battlelogList) {
+
+				// モードリストに該当するモードの場合はバトル数を加算
+				if (modeList.some(mode => battlelog.event.mode == mode)) {
+					battle++;
+					// 勝利していれば勝利数を加算
+					if (battlelog.battle.result == "victory") {
+						victory++;
+					}
+				}
+			}
+
+			// 勝率をプレイヤー詳細にセット
+			this.$set(this.playerDetail, 'victoryRate', Math.round(victory * 100 / battle));
 		}
+
 	}
 
 })

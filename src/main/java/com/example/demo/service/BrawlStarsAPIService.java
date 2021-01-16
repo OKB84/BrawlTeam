@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.config.RestTemplateConfig;
+import com.example.demo.controller.dto.BattleLogAPIDto;
 import com.example.demo.controller.dto.ClubMember;
 import com.example.demo.controller.dto.ClubPlayerAPIDto;
 import com.example.demo.controller.dto.PlayerInfoDto;
@@ -122,6 +123,37 @@ public class BrawlStarsAPIService {
 		} catch (HttpClientErrorException e) {
 
 			// playerTagに該当するプレイヤーが見つからなかった場合
+			e.printStackTrace();
+			return null;
+
+		}
+	}
+
+	// プレイヤータグからバトルログを取得
+	public BattleLogAPIDto getBattleLog(String playerTag) {
+
+		try {
+
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.add("Authorization", "Bearer " + API_KEY);
+		    headers.add("Accept", "application/json");
+		    HttpEntity<String> req = new HttpEntity<>(headers);
+
+		    RestTemplate restTemplate = new RestTemplate();
+
+		    if (!StringUtils.equals(SPRING_PROFILES_ACTIVE, "development")) {
+			    config.customize(restTemplate);		// 本番環境では固定IPを利用
+		    }
+
+		    ResponseEntity<BattleLogAPIDto> res = restTemplate.exchange(
+		    	BASE_URL + "players/" + playerTag + "/battlelog",		// プレイヤータグのシャープはパーセントにしないとエラーになる
+		    	HttpMethod.GET, req, BattleLogAPIDto.class
+		    );
+		    return res.getBody();
+
+		} catch (HttpClientErrorException e) {
+
+			// playerTagに該当するバトルログが見つからなかった場合
 			e.printStackTrace();
 			return null;
 

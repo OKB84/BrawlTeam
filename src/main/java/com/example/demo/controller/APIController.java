@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controller.dto.BattleLog;
 import com.example.demo.controller.dto.ChampionshipDateFormatedDto;
 import com.example.demo.controller.dto.ChampionshipDetailDto;
 import com.example.demo.controller.dto.ChampionshipDto;
@@ -367,6 +368,13 @@ public class APIController {
 			return createErrorResponse(null, null, "キャラクターマスタが更新できませんでした。再度お試しください。");
 		}
 
+	}
+
+	// プレイヤーの直近25試合までのバトルログを取得
+	@GetMapping("/member/battlelog/{playerTag}")
+	List<BattleLog> getBattleLog(@PathVariable("playerTag") String playerTag) {
+
+		return brawlStarsAPIService.getBattleLog("%" + playerTag).getItems();
 	}
 
 	// エラー発生時のレスポンス内容を作成（バリデーションエラー以外）
