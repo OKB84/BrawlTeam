@@ -20,6 +20,7 @@ public class UserEntity {
 	private String socialMediaId;	// ソーシャルメディアのユーザID
 	private String name;			// ソーシャルメディア上の名前
 	private String email;			// ソーシャルメディアアカウントのメールアドレス
+	private int admin;				// 管理者権限の有無（0:なし、1:あり）
 	private Date createdAt;			// レコード作成日時
 	private Date updatedAt;			// レコード更新日時
 

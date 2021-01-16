@@ -26,12 +26,66 @@
 					</div>
 					<p class="small">※プレイヤータグの<span class="stress-char">「#」以降の英数字</span>を入力してください。</p>
 					<p class="small">※プレイヤータグを設定すると、メンバー追加の際に所属クラブからのインポート機能を利用することができるようになります。</p>
+					<div th:if="${session.admin == 1}" class="master-edit-btn-area">
+						<button type="button" @click="showModal=true" class="btn btn-app"><i class="fas fa-database"></i> マスタメンテナンス</button>
+					</div>
 					<div class="delete-btn-area">
 						<button type="button" @click="deleteAccount" class="btn btn-danger"><i class="fas fa-user-friends"></i> アカウント削除</button>
 					</div>
 				</div>
 			</div>
 		</div>
+		<transition name="fade">
+			<div v-if="showModal">
+				<div class="modal">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">マスタメンテナンス</h4>
+								<button type="button" class="close" @click="showModal=false">×</button>
+							</div>
+							<div class="modal-body">
+								<div class="d-flex flex-column overflow-auto">
+							        <div>
+										<table class="table table-sm">
+											<thead>
+												<tr class="brawler-header">
+													<th>ID</th>
+													<th>名前</th>
+													<th>タイプ</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="brawler in brawlerList">
+													<td class="brawler-id">{{ brawler.id }}</td>
+													<td>{{ brawler.name }}</td>
+													<td class="brawler-type">
+														<select v-model="brawler.type">
+															<option value=""></option>
+															<option value="1">長距離</option>
+															<option value="2">長タンクメタ</option>
+															<option value="3">中距離</option>
+															<option value="4">中タンクメタ</option>
+															<option value="5">タンク</option>
+															<option value="6">セミタンク</option>
+															<option value="7">スローワー</option>
+														</select>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+							        </div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button @click="updateBrawlerList" type="button" class="btn btn-danger"><i class="fas fa-save"></i> 上記の内容で更新</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-backdrop show"></div>
+			</div>
+		</transition>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 	<script type="text/javascript" src="/js/account/profile.js"></script>

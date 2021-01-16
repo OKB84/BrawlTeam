@@ -38,5 +38,25 @@
 			id = #{id, jdbcType=INTEGER}
 	</select>
 
+	<select id="getAll" resultType="com.example.demo.entity.BrawlerMasterEntity">
+		SELECT
+			id,
+			name,
+			type,
+			created_at,
+			updated_at
+		FROM
+			brawler_master
+	</select>
+
+	<update id="updateType" parameterType="com.example.demo.entity.BrawlerMasterEntity">
+		UPDATE
+			brawler_master
+		SET
+			type = #{type, jdbcType=VARCHAR}
+		WHERE
+			id = #{id, jdbcType=INTEGER}
+	</update>
+
 </mapper>
 

@@ -17,4 +17,7 @@ public interface BrawlerMasterMapper {
 
 	public List<BrawlerMasterEntity> search(String id);
 
+	public List<BrawlerMasterEntity> getAll();
+
+	public int updateType(BrawlerMasterEntity entity);
 }

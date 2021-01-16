@@ -37,4 +37,20 @@ public class BrawlerMasterService {
 		return insertSuccessCount;
 	}
 
+	// 全レコード取得
+	public List<BrawlerMasterEntity> getAll() {
+		return mapper.getAll();
+	}
+
+	// 全レコードのキャラタイプ更新
+	public int updateType(List<BrawlerMasterEntity> list) {
+
+		int updateSuccessCount = 0;		// UPDATE成功回数
+
+		for (BrawlerMasterEntity entity : list) {
+			updateSuccessCount += mapper.updateType(entity);
+		}
+
+		return updateSuccessCount;
+	}
 }

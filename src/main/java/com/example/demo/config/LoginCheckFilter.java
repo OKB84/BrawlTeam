@@ -61,7 +61,8 @@ public class LoginCheckFilter implements Filter{
         		"/championship-member/*",
         		"/championship/*",
         		"/account/*",
-        		"/user/*"
+        		"/user/*",
+        		"/brawler/*"
         	);
         return registrationBean;
     }

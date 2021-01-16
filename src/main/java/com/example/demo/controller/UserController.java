@@ -22,6 +22,10 @@ public class UserController {
 	@GetMapping("/profile")
 	String getMypage() {
 
+		// キャラクターマスタ編集権限の有無を確認するため管理者権限の有無をセッションに保存
+		int admin = userService.search((Integer)session.getAttribute("userId")).getAdmin();
+		session.setAttribute("admin", admin);
+
 		return "account/profile";
 	}
 

@@ -3,11 +3,14 @@ var app = new Vue({
 	data: {
 		currentPlayerTag: '',		// 設定済みのプレイヤータグ
 		playerTag: '',				// メンバー追加欄のプレイヤータグ入力値
-		playerTagError: ''			// メンバー追加時のエラーメッセージ
+		playerTagError: '',			// メンバー追加時のエラーメッセージ
+		brawlerList: [],			// キャラクターマスタのリスト
+		showModal: false	// キャラクターマスタ編集モーダルの表示切り替え
 	},
 	// ページロード時に設定済みのプレイヤータグを取得
 	created: function() {
-		this.getCurrentPlayerTag();
+		this.getCurrentPlayerTag();		// ログイン中のユーザのプレイヤータグを取得
+		this.getBrawlerList();			// キャラクターマスタを取得
 	},
 
 	methods: {
@@ -20,6 +23,21 @@ var app = new Vue({
 				})
 				.then(data => {		// JSONデータ
 					this.currentPlayerTag = data.playerTag ? data.playerTag.replace('%', '#') : null;
+				})
+				.catch(error => {	// その他エラーの場合
+					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
+					console.log(error);
+				});
+		},
+
+		// キャラクターマスタのリストを取得
+		getBrawlerList: function() {
+			fetch('/api/brawler/all')
+				.then(response => {
+					return response.json();		// Promiseを返す
+				})
+				.then(data => {		// JSONデータ
+					this.brawlerList = data;
 				})
 				.catch(error => {	// その他エラーの場合
 					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
@@ -101,10 +119,43 @@ var app = new Vue({
 				});
 		},
 
+		// キャラクタータイプを更新
+		updateBrawlerList: function() {
+
+			// FetchAPIのオプション準備
+			const param  = {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json; charset=utf-8"
+				},
+				// リクエストボディ
+				body: JSON.stringify(this.brawlerList)
+			};
+
+			fetch('/api/brawler/update', param)
+				.then(response => {
+					return response.json();		// Promiseを返す
+				})
+				.then(data => {		// JSONデータ
+					if (data.length === 0) {	// 追加成功時
+						this.getBrawlerList();				// キャラクターマスタ表示を更新
+						this.showModal = false;				// 入力欄をクリア
+						alert('キャラクターマスタの更新が完了しました。');
+					} else {	// エラー等発生の場合
+						alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
+					}
+				})
+				.catch(error => {	// その他エラーの場合
+					alert('予期せぬエラーが発生しました。運営にお問い合わせください。');
+					console.log(error);
+				});
+		},
+
 		// すべてのエラーメッセージをクリア
 		eraseErrorMessage: function() {
 			this.playerTagError = '';
 			this.importError = '';
-		}
+		},
+
 	}
 })

@@ -31,6 +31,7 @@ import com.example.demo.controller.dto.ErrorResponseDto;
 import com.example.demo.controller.dto.PlayerDetailDto;
 import com.example.demo.controller.dto.PlayerInfoDto;
 import com.example.demo.controller.dto.PlayerTagDto;
+import com.example.demo.entity.BrawlerMasterEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.BrawlStarsAPIService;
 import com.example.demo.service.BrawlerMasterService;
@@ -344,6 +345,30 @@ public class APIController {
 		return userService.search((Integer)session.getAttribute("userId"));
 	}
 
+	// キャラクターマスタの全レコードを取得
+	@GetMapping("/brawler/all")
+	List<BrawlerMasterEntity> getAllFromBrawlerMaster() {
+
+		return brawlerMasterService.getAll();
+	}
+
+	// キャラクターマスタのタイプ（長距離、タンクなど）を更新
+	@PostMapping("/brawler/update")
+	ResponseEntity<Object> updateType(@RequestBody List<BrawlerMasterEntity> brawlerList) {
+
+		// ユーザの管理者権限の有無を確認
+		int admin = userService.search((Integer)session.getAttribute("userId")).getAdmin();
+
+		if (admin == 1 && brawlerMasterService.updateType(brawlerList) > 0) {
+			// 管理者権限を持ち、且つ更新に成功した場合
+			return new ResponseEntity<>(new ArrayList<String>(), HttpStatus.OK);
+		} else {
+			// 更新できていなかった場合
+			return createErrorResponse(null, null, "キャラクターマスタが更新できませんでした。再度お試しください。");
+		}
+
+	}
+
 	// エラー発生時のレスポンス内容を作成（バリデーションエラー以外）
 	private ResponseEntity<Object> createErrorResponse(String keyName, Object keyValue, String message) {
 
@@ -364,4 +389,5 @@ public class APIController {
 		}
 		return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
 	}
+
 }
