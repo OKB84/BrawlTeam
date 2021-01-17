@@ -210,7 +210,15 @@ var app = new Vue({
 			        // 最大値を指定
 			        max: this.chartMaxValue,
 			      }
-			    }
+			    },
+				legend: {
+					display: false	// 凡例を非表示
+				},
+				title: {
+					display: true,
+					//グラフタイトル
+					text: '平均最多トロフィー数'
+				}
 			  }
 			});
 		},

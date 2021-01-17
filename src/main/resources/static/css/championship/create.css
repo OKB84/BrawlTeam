@@ -110,11 +110,6 @@ table.player-detail {
     border: solid 1px #ffd89e;
 }
 
-#radarChart {
-	max-width: 600px;
-	max-height: 300px;
-}
-
 .submit-fotter {
 	text-align: center;
 	margin-bottom: 50px;
