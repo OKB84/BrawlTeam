@@ -370,13 +370,6 @@ public class APIController {
 
 	}
 
-	// プレイヤーの直近25試合までのバトルログを取得
-	@GetMapping("/member/battlelog/{playerTag}")
-	List<BattleLog> getBattleLog(@PathVariable("playerTag") String playerTag) {
-
-		return brawlStarsAPIService.getBattleLog("%" + playerTag).getItems();
-	}
-
 	// エラー発生時のレスポンス内容を作成（バリデーションエラー以外）
 	private ResponseEntity<Object> createErrorResponse(String keyName, Object keyValue, String message) {
 

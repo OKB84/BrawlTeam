@@ -15,7 +15,7 @@ public interface BrawlerMasterMapper {
 
 	public int create(BrawlerMasterEntity entity);
 
-	public List<BrawlerMasterEntity> search(String id);
+	public List<BrawlerMasterEntity> search(int id);
 
 	public List<BrawlerMasterEntity> getAll();
 

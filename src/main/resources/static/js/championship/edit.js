@@ -22,6 +22,7 @@ var app = new Vue({
 		playerDetail: {},			// プレイヤー詳細情報
 		chartLoaded: true,			// レーダーチャートの表示切り替え
 		chartMaxValue: 100,			// レーダーチャートの最大値
+		doughnutChartLoaded: true,		// ドーナツチャートの表示切り替え
 		showUpdatingModal: false,			// API通信中のモーダル表示切り替え
 		modalUpdatingMessage: ''			// API通信中のモーダル中のメッセージ
 	},
@@ -143,9 +144,18 @@ var app = new Vue({
 					avgTroHeavyWeight: 0,
 					avgTroSemiHeavyWeight: 0,
 					avgTroThrower: 0,
-					victoryRate: '-'
+					victoryRate: '-',
+					useAllBrawlers: 0,
+					useLongRange: 0,
+					useLongRangeSupHeavy: 0,
+					useMidRange: 0,
+					useMidRangeSupHeavy: 0,
+					useHeavyWeight: 0,
+					useSemiHeavyWeight: 0,
+					useThrower: 0
 				}
 				this.displayChart();
+				this.displayDoughnutChart();
 
 			fetch('/api/championship/show/' + this.championshipId)
 				.then(response => {
@@ -460,18 +470,19 @@ var app = new Vue({
 
 			this.playerDetail = null;
 			this.chartLoaded = false;
-
+			this.doughnutChartLoaded = false;
 
 			// パーセントはパラメータとして受け取れないため置換して送信
 			fetch('/api/member/show/' + playerTag.replace('%', ''))
 				.then(response => {
-					this.getBattlelogList(playerTag);	// 3on3の勝率を表示
 					this.chartLoaded = true;
+					this.doughnutChartLoaded = true;	// ドーナツチャートを表示
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ
 					this.playerDetail = data;
 					this.displayChart();
+					this.displayDoughnutChart();
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);
@@ -507,7 +518,7 @@ var app = new Vue({
 			  //データの設定
 			  data: {
 			      //データ項目のラベル
-			      labels: ["全キャラクター", "長距離", "長タンクメタ", "中距離", "中タンクメタ", "タンク", "セミタンク高機動", "スローワー"],
+			      labels: ["全キャラクター", "長距離", "長タンクメタ", "中距離", "中タンクメタ", "タンク", "セミタンク", "スローワー"],
 			      //データセット
 			      datasets: [
 			          {
@@ -543,61 +554,67 @@ var app = new Vue({
 			        // 最大値を指定
 			        max: this.chartMaxValue,
 			      }
-			    }
+			    },
+				legend: {
+					display: false	// 凡例を非表示
+				},
+				title: {
+					display: true,
+					//グラフタイトル
+					text: '平均最多トロフィー数'
+				}
 			  }
 			});
 		},
 
-		// バトルログリストを取得
-		getBattlelogList: function(playerTag) {
+		// ドーナツチャート描画（大会新規作成、メンバー一覧画面とソース重複状態）
+		displayDoughnutChart: function() {
 
-			fetch('/api/member/battlelog/' + playerTag.replace('%', ''))
-				.then(response => {
-					return response.json();		// Promiseを返す
-				})
-				.then(data => {		// JSONデータ
-					console.log(data)
-					this.get3on3Result(data);
-				})
-				.catch(error => {	// その他エラーの場合
-					alert('勝率の取得に失敗しました。時間を置いて再度お試しください。');
-					console.log(error);
-				});
-		},
+			// 描画用の平均トロフィー配列を作成
+			const chartData = [
+					this.playerDetail.useLongRange,
+					this.playerDetail.useLongRangeSupHeavy,
+					this.playerDetail.useMidRange,
+					this.playerDetail.useMidRangeSupHeavy,
+					this.playerDetail.useHeavyWeight,
+					this.playerDetail.useSemiHeavyWeight,
+					this.playerDetail.useThrower
+				]
 
-		// バトルログリストから3on3の勝率を算出
-		get3on3Result: function(battlelogList) {
-
-			let battle = 0;		// 3on3のバトル数
-			let victory = 0;	// 3on3の勝利数
-
-			// 3on3のモード
-			const modeList = [
-								"gemGrab",
-								"brawlBall",
-								"siege",
-								"heist",
-								"bounty",
-								"hotZone",
-								"presentPlunder"
-							]
-
-			// バトルログからバトル数及び勝利数を計算
-			for (battlelog of battlelogList) {
-
-				// モードリストに該当するモードの場合はバトル数を加算
-				if (modeList.some(mode => battlelog.event.mode == mode)) {
-					battle++;
-					// 勝利していれば勝利数を加算
-					if (battlelog.battle.result == "victory") {
-						victory++;
+			var ctx = document.getElementById("doughnutChart");
+			var myDoughnutChart= new Chart(ctx, {
+				type: 'doughnut',
+				data: {
+			    	labels: ["長距離", "長タンクメタ", "中距離", "中タンクメタ", "タンク", "セミタンク", "スローワー"],
+					datasets: [{
+						backgroundColor: [
+							"#960200",
+							"#CE6C47",
+							"#344055",
+							"#84A9C0",
+							"#E8871E",
+							"#EDB458",
+							"#D4D4AA"
+						],
+						data: chartData //グラフのデータ
+					}]
+				},
+				options: {
+			    	responsive: true,	// レスポンシブ指定
+					legend: {
+						position: 'right',	// 凡例表示位置
+						labels: {
+							fontSize: 8,	// 凡例フォントサイズ
+							padding: 7			// 凡例行間
+						}
+					},
+					title: {
+						display: true,
+						//グラフタイトル
+						text: 'キャラ別使用回数（直近25試合）'
 					}
 				}
-			}
-
-			// 勝率をプレイヤー詳細にセット
-			this.$set(this.playerDetail, 'victoryRate', Math.round(victory * 100 / battle));
+			});
 		}
 	}
-
 })

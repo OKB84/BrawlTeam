@@ -1,13 +1,17 @@
 package com.example.demo.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.controller.dto.BattleLog;
 import com.example.demo.controller.dto.ChampionshipMemberDto;
+import com.example.demo.controller.dto.Player;
 import com.example.demo.controller.dto.PlayerDetailDto;
 import com.example.demo.controller.dto.PlayerInfoDto;
 import com.example.demo.entity.PlayerEntity;
@@ -25,6 +29,8 @@ public class PlayerService {
 	HttpSession session;
 	@Autowired
 	PlayerMapper mapper;
+	@Autowired
+	BrawlerMasterService brawlerMasterService;
 	@Autowired
 	BrawlStarsAPIService brawlStarsService;
 
@@ -76,9 +82,107 @@ public class PlayerService {
 	// プレイヤーの詳細情報を取得
 	public PlayerDetailDto getPlayerDetail(String playerTag) {
 
-		return mapper.getPlayerDetail(playerTag);
+		// バトルログ以外の情報を取得
+		PlayerDetailDto playerDetailDto = mapper.getPlayerDetail(playerTag);
+		playerDetailDto.setPlayerTag(playerTag);
+
+		// 公式APIからバトルログ取得
+		List<BattleLog> battleLogList = brawlStarsService.getBattleLog(playerTag).getItems();
+
+		// 3on3の勝率を計算してセット
+		playerDetailDto.setVictoryRate(setVictoryRate(battleLogList));
+
+		// バトルログから引数で受け取ったプレイヤータグのプレイヤーの使用キャラクターを取得
+		for (BattleLog battleLog : battleLogList) {
+
+			List<List<Player>> teams = battleLog.getBattle().getTeams();
+			List<Player> players = battleLog.getBattle().getPlayers();
+
+			if (teams != null && teams.get(0).size() > 0) {
+				// 3on3のモードの場合（例外が発生しないようnullチェック）
+				for (List<Player> playerList : teams) {
+					playerDetailDto = setUseBrawler(playerDetailDto, playerList);
+				}
+			}
+
+			if (players != null && players.size() > 0) {
+				// バトルロイヤルやボスファイト等の場合（例外が発生しないようnullチェック）
+				playerDetailDto =  setUseBrawler(playerDetailDto, players);
+			}
+		}
+
+		return playerDetailDto;
 	}
 
+	// バトルログ内のプレイヤーリストからキャラクタータイプごとの使用回数を算出してDTOに追加
+	private PlayerDetailDto setUseBrawler(PlayerDetailDto dto, List<Player> list) {
+		for (Player player : list) {
+			// プレイヤータグが目的のプレイヤーであればキャラクタータイプをチェック
+			if (StringUtils.equals(player.getTag().replace("#", "%"), dto.getPlayerTag())) {
+				String type = brawlerMasterService.getType(player.getBrawler().getId());
+
+				switch (type) {
+					case "1":
+						dto.setUseLongRange(dto.getUseLongRange() + 1);
+						break;
+					case "2":
+						dto.setUseLongRangeSupHeavy(dto.getUseLongRangeSupHeavy() + 1);;
+						break;
+					case "3":
+						dto.setUseMidRange(dto.getUseMidRange() + 1);
+						break;
+					case "4":
+						dto.setUseMidRangeSupHeavy(dto.getUseMidRangeSupHeavy() + 1);
+						break;
+					case "5":
+						dto.setUseHeavyWeight(dto.getUseHeavyWeight() + 1);
+						break;
+					case "6":
+						dto.setUseSemiHeavyWeight(dto.getUseSemiHeavyWeight() + 1);
+						break;
+					case "7":
+						dto.setUseThrower(dto.getUseThrower() + 1);
+						break;
+				}
+			}
+		}
+		return dto;
+	}
+
+	// バトルログから3on3の勝率を算出
+	private int setVictoryRate(List<BattleLog> battleLogList) {
+
+		int battleCounter = 0;		// 3on3のバトル回数
+		int victoryCounter = 0;		// 3on3の勝利回数
+
+		// 3on3のモードの名前を配列化
+		String[] modeArr = {
+							"gemGrab",
+							"brawlBall",
+							"siege",
+							"heist",
+							"bounty",
+							"hotZone",
+							"presentPlunder"
+						};
+
+		// containsメソッドで処理の高速化を図るためリスト型に変換
+		List<String> modeList = Arrays.asList(modeArr);
+
+		for (BattleLog battleLog : battleLogList) {
+			if (modeList.contains(battleLog.getEvent().getMode())) {
+				// モードが3on3であればバトル回数をインクリメント
+				battleCounter++;
+				if (StringUtils.equals(battleLog.getBattle().getResult(), "victory")) {
+					// 勝利していれば勝利回数をインクリメント
+					victoryCounter++;
+				}
+			}
+		}
+
+		// 四捨五入して勝率（パーセント）を返却
+		return Math.round(victoryCounter * 100 / battleCounter);
+	}
 
 	// DTOからEntityへのデータ詰め替えを共通化したメソッド
 	private PlayerEntity setEntityFromDto(PlayerInfoDto dto) {

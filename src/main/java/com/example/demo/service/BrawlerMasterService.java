@@ -53,4 +53,17 @@ public class BrawlerMasterService {
 
 		return updateSuccessCount;
 	}
+
+	// キャラクターIDからタイプを取得
+	public String getType(int id) {
+
+		List<BrawlerMasterEntity> list = mapper.search(id);
+
+		// 検索結果が存在すればタイプを返し、存在しなければnullを返す
+		if (list.size() > 0) {
+			return list.get(0).getType();
+		} else {
+			return null;
+		}
+	}
 }

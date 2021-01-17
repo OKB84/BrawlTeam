@@ -28,10 +28,11 @@
 		)
 	</insert>
 
-	<select id="search" resultType="com.example.demo.entity.BrawlerMasterEntity" parameterType="string">
+	<select id="search" resultType="com.example.demo.entity.BrawlerMasterEntity" parameterType="int">
 		SELECT
 			id,
-			name
+			name,
+			type
 		FROM
 			brawler_master
 		WHERE
