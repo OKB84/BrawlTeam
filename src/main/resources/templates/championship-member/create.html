@@ -16,7 +16,7 @@
 					<p>追加したいメンバーのプレイヤータグの<span class="stress-char">「#」以降の英数字</span>を入力してください。</p>
 					<div class="add-forms">
 						<p class="has-error-p">{{ playerTagError }}</p>
-						<span># </span><input type="text" id="playerTag" name="playerTag" v-model="playerTag" v-bind:class="{ 'has-error': playerTagError }">
+						<span># </span><input type="text" id="playerTag" name="playerTag" v-model="playerTag" v-bind:class="{ 'has-error': playerTagError }" @input="inputHalfSizeRestriction">
 						<button type="button" @click="addMember" class="btn btn-danger add-btn"><i class="fas fa-plus"></i> 追加</button>
 					</div>
 					<p class="small">※<a href="/user/profile" class="account-link">アカウントページ</a>でプレイヤータグを設定済みで、クラブに所属している場合は、クラブメンバーをインポート（一括追加）することができます。</p>
@@ -30,6 +30,6 @@
 		<div th:insert="./layout/fragments :: modalUpdating"></div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-	<script type="text/javascript" src="/js/championship-member/create.js"></script>
+	<script type="text/javascript" src="/js/championship-member/create.js?20210118"></script>
 </body>
 </html>

@@ -345,7 +345,11 @@ var app = new Vue({
 						position: 'right',	// 凡例表示位置
 						labels: {
 							fontSize: 8,		// 凡例フォントサイズ
-							padding: 7			// 凡例行間
+							padding: 7,			// 凡例行間
+							filter: function(item, chartData) {
+								// 使用回数が0回のキャラタイプは凡例を表示しない
+								return chartData.datasets[0].data[item.index] > 0;
+							}
 						}
 					},
 					title: {

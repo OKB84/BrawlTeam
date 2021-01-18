@@ -21,7 +21,7 @@
 
 					<div class="save-forms">
 						<p class="has-error-p">{{ playerTagError }}</p>
-						<span># </span><input type="text" id="playerTag" name="playerTag" v-model="playerTag" v-bind:class="{ 'has-error': playerTagError }">
+						<span># </span><input type="text" id="playerTag" name="playerTag" v-model="playerTag" v-bind:class="{ 'has-error': playerTagError }" @input="inputHalfSizeRestriction">
 						<button type="button" @click="savePlayerTag" class="btn btn-secondary save-btn"><i class="fas fa-save"></i> {{ currentPlayerTag ? '更新' : '登録' }}</button>
 					</div>
 					<p class="small">※プレイヤータグの<span class="stress-char">「#」以降の英数字</span>を入力してください。</p>
@@ -88,6 +88,6 @@
 		</transition>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-	<script type="text/javascript" src="/js/account/profile.js?20210116"></script>
+	<script type="text/javascript" src="/js/account/profile.js?20210118"></script>
 </body>
 </html>

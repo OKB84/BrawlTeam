@@ -45,6 +45,15 @@ var app = new Vue({
 				});
 		},
 
+		// プレイヤータグの入力制限
+		inputHalfSizeRestriction: function() {
+            tmp_value = this.playerTag;
+            if(tmp_value){
+				// 小文字は大文字にした上で、半角英数字以外は入力値から自動で消去
+                this.playerTag = tmp_value.toUpperCase().replace(/[^0-9A-Z]/g,'');
+            }
+        },
+
 		// プレイヤータグをプロフィールに追加
 		savePlayerTag: function() {
 
