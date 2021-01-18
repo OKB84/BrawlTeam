@@ -146,7 +146,7 @@
 		</div>
 
 		<div class="row">
-			<div class="col-md-6 offset-xl-1 col-xl-5">
+			<div class="offset-xl-2 col-xl-8 offset-lg-1 col-lg-10">
 				<p class="has-error-p">{{ teamListError }}</p>
 				<div class="table-responsive">
 					<table class="table table-sm table-hover player-list">
@@ -191,10 +191,27 @@
 					:next-link-class="'page-link'">
 				</paginate>
 			</div>
-			<div class="col-md-6 col-xl-5">
-				<div th:insert="./layout/fragments :: playerDetail('showHeader')"></div>
-			</div>
 		</div>
+		<transition name="fade">
+			<div v-if="showModalDetail">
+				<div class="modal" @click.self="showModalDetail=false">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">メンバー詳細</h4>
+								<button type="button" class="close" @click="showModalDetail=false">×</button>
+							</div>
+							<div class="modal-body">
+								<div class="d-flex flex-column overflow-auto">
+									<div th:insert="./layout/fragments :: playerDetail('hideHeader')"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-backdrop show"></div>
+			</div>
+		</transition>
 
 		<div class="row">
 			<div class="offset-xl-1 col-xl-10 table-responsive">

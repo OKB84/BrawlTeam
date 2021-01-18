@@ -21,9 +21,10 @@ var app = new Vue({
 		playerDetail: {},			// プレイヤー詳細情報
 		chartLoaded: true,			// レーダーチャートの表示切り替え
 		chartMaxValue: 100,			// レーダーチャートの最大値
-		doughnutChartLoaded: true,		// ドーナツチャートの表示切り替え
-		showUpdatingModal: false,			// API通信中のモーダル表示切り替え
-		modalUpdatingMessage: ''			// API通信中のモーダル中のメッセージ
+		doughnutChartLoaded: true,	// ドーナツチャートの表示切り替え
+		showModalDetail: false,		// プレイヤー詳細のモーダル表示切り替え
+		showUpdatingModal: false,	// API通信中のモーダル表示切り替え
+		modalUpdatingMessage: ''	// API通信中のモーダル中のメッセージ
 	},
 	computed: {
 		// 参加可能プレイヤー数算出
@@ -135,8 +136,6 @@ var app = new Vue({
 					useThrower: 0
 				}
 
-				this.displayChart();
-				this.displayDoughnutChart();
 			})
 			.catch(error => {	// エラーの場合
 				console.log(error);
@@ -372,6 +371,7 @@ var app = new Vue({
 				.then(response => {
 					this.chartLoaded = true;
 					this.doughnutChartLoaded = true;	// ドーナツチャートを表示
+					this.showModalDetail = true;		// プレイヤー詳細モーダルを表示
 					return response.json();		// Promiseを返す
 				})
 				.then(data => {		// JSONデータ

@@ -123,6 +123,18 @@ button.btn-app {
   display: block;
 }
 
+/* モーダル内で縦スクロールする */
+.modal .modal-content {
+	overflow-y: initial !important;
+	background-color: #f5f5f7;
+}
+
+/* モーダル内で縦スクロールする */
+.modal .modal-body {
+	height: calc(100vh - 230px);
+	overflow-y:auto;
+}
+
 /* vueのtransitionを使うため */
 .fade-enter-active, .fade-leave-active {
   transition: opacity .15s;
