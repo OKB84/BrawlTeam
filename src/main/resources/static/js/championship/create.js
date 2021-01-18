@@ -432,7 +432,7 @@ var app = new Vue({
 			              //結合点の枠線の色（ホバーしたとき）
 			              pointHoverBorderColor: "rgba(80,126,164,1)",
 			              //結合点より外でマウスホバーを認識する範囲（ピクセル単位）
-			              hitRadius: 5,
+			              hitRadius: 10,
 			              //グラフのデータ
 			              data: trophieAvgs
 			          }
