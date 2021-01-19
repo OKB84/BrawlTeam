@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.controller.dto.BrawlerStat;
+import com.example.demo.controller.dto.PlayerDetailDto;
 import com.example.demo.controller.dto.PlayerInfoDto;
 import com.example.demo.entity.OwnBrawlerEntity;
+import com.example.demo.entity.TrophyMedianEntity;
 import com.example.demo.mapper.OwnBrawlerMapper;
 
 /**
@@ -62,5 +64,48 @@ public class OwnBrawlerService {
 	// 所有キャラクター情報一覧の取得
 	public List<String> search(String playerTag) {
 		return mapper.search(playerTag);
+	}
+
+	// トロフィー数の中央値を取得
+	public PlayerDetailDto setMedian(PlayerDetailDto dto) {
+
+		String playerTag = dto.getPlayerTag();
+
+		// データ取得用のエンティティに詰め替えてプレイヤータグをセット
+	    TrophyMedianEntity entity = new TrophyMedianEntity();
+	    entity.setPlayerTag(playerTag);
+
+	    // 各タイプの所有キャラクター数の半分の値を取得
+	    List<Integer> offsetList = mapper.getOffsetForMedian(playerTag);
+
+	    // 各タイプの中央値を取得
+    	entity.setType("1");
+    	entity.setOffset(offsetList.get(0));
+	    dto.setMedianTroLongRange(mapper.getSingleMedian(entity));
+    	entity.setType("2");
+    	entity.setOffset(offsetList.get(1));
+	    dto.setMedianTroLongRangeSupHeavy(mapper.getSingleMedian(entity));
+    	entity.setType("3");
+    	entity.setOffset(offsetList.get(2));
+	    dto.setMedianTroMidRange(mapper.getSingleMedian(entity));
+    	entity.setType("4");
+    	entity.setOffset(offsetList.get(3));
+	    dto.setMedianTroMidRangeSupHeavy(mapper.getSingleMedian(entity));
+    	entity.setType("5");
+    	entity.setOffset(offsetList.get(4));
+	    dto.setMedianTroHeavyWeight(mapper.getSingleMedian(entity));
+    	entity.setType("6");
+    	entity.setOffset(offsetList.get(5));
+	    dto.setMedianTroSemiHeavyWeight(mapper.getSingleMedian(entity));
+    	entity.setType("7");
+    	entity.setOffset(offsetList.get(6));
+	    dto.setMedianTroThrower(mapper.getSingleMedian(entity));
+
+	    // 全タイプ合計の中央値を取得
+	    entity.setOffset(Math.floorDiv(mapper.search(playerTag).size(), 2));
+	    System.out.println(entity.getOffset());
+	    dto.setMedianTroAllBrawlers(mapper.getEntireMedian(entity));
+
+	    return dto;
 	}
 }

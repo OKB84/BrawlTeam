@@ -162,10 +162,24 @@ var app = new Vue({
 
 			const maxTrophieAvg = Math.max(...trophieAvgs);		// 平均トロフィー最大値
 
-			// 初期表示時以外は、チャートの最大値を平均トロフィ最大値の100未満繰り上げに設定
-			if (maxTrophieAvg > 0) {
-				this.chartMaxValue = Math.ceil(maxTrophieAvg / 100) * 100;
-			}
+			// 描画用の中央値トロフィー配列を作成
+			const trophieMedians = [
+					this.playerDetail.medianTroAllBrawlers,
+					this.playerDetail.medianTroLongRange,
+					this.playerDetail.medianTroLongRangeSupHeavy,
+					this.playerDetail.medianTroMidRange,
+					this.playerDetail.medianTroMidRangeSupHeavy,
+					this.playerDetail.medianTroHeavyWeight,
+					this.playerDetail.medianTroSemiHeavyWeight,
+					this.playerDetail.medianTroThrower
+				]
+
+			const maxTrophieMedian = Math.max(...trophieMedians);		// 中央値トロフィー最大値
+
+			const greaterValue = maxTrophieAvg >= maxTrophieMedian ? maxTrophieAvg : maxTrophieMedian;
+
+			// チャートの最大値を平均トロフィ最大値の100未満繰り上げに設定
+			this.chartMaxValue = Math.ceil(greaterValue / 100) * 100;
 
 			var ctx = document.getElementById("radarChart");
 			var myChart = new Chart(ctx, {
@@ -178,8 +192,8 @@ var app = new Vue({
 			      //データセット
 			      datasets: [
 			          {
-			             //凡例のラベル
-			              label: "平均最多トロフィー数",
+			              //凡例のラベル
+			              label: "平均値",
 			              //背景色
 			              backgroundColor: "rgba(80,126,164,0.3)",
 			              //枠線の色
@@ -196,6 +210,26 @@ var app = new Vue({
 			              hitRadius: 10,
 			              //グラフのデータ
 			              data: trophieAvgs
+			          },
+			          {
+						  //凡例のラベル
+			              label: "中央値",
+				          //背景色
+				          backgroundColor: "rgba(200,112,126,0.3)",
+				          //枠線の色
+				          borderColor: "rgba(200,112,126,1)",
+				          //結合点の背景色
+				          pointBackgroundColor: "rgba(200,112,126,1)",
+				          //結合点の枠線の色
+				          pointBorderColor: "#fff",
+				          //結合点の背景色（ホバーしたとき）
+				          pointHoverBackgroundColor: "#fff",
+				          //結合点の枠線の色（ホバーしたとき）
+				          pointHoverBorderColor: "rgba(200,112,126,1)",
+			              //結合点より外でマウスホバーを認識する範囲（ピクセル単位）
+			              hitRadius: 10,
+			              //グラフのデータ
+			              data: trophieMedians
 			          }
 			      ]
 			  },
@@ -212,12 +246,15 @@ var app = new Vue({
 			      }
 			    },
 				legend: {
-					display: false	// 凡例を非表示
+					position: 'right',	// 凡例表示位置
+					labels: {
+						fontSize: 8		// 凡例フォントサイズ
+					}
 				},
 				title: {
 					display: true,
 					//グラフタイトル
-					text: '平均最多トロフィー数'
+					text: '最多トロフィー数'
 				}
 			  }
 			});

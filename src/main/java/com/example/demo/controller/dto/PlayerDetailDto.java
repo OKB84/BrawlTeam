@@ -35,4 +35,12 @@ public class PlayerDetailDto {
 	private int useHeavyWeight;				// 直近25試合での使用回数（タンク）
 	private int useSemiHeavyWeight;			// 直近25試合での使用回数（セミタンク）
 	private int useThrower;					// 直近25試合での使用回数（スローワー）
+	private int medianTroAllBrawlers;		// 最多トロフィー数中央値（全キャラクター）
+	private int medianTroLongRange;			// 最多トロフィー数中央値（長距離）
+	private int medianTroLongRangeSupHeavy;	// 最多トロフィー数中央値（長距離タンクメタ）
+	private int medianTroMidRange;			// 最多トロフィー数中央値（中距離）
+	private int medianTroMidRangeSupHeavy;	// 最多トロフィー数中央値（中距離タンクメタ）
+	private int medianTroHeavyWeight;		// 最多トロフィー数中央値（タンク）
+	private int medianTroSemiHeavyWeight;	// 最多トロフィー数中央値（セミタンク）
+	private int medianTroThrower;			// 最多トロフィー数中央値（スローワー）
 }

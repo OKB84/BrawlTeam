@@ -45,5 +45,46 @@
 			player_tag = #{playerTag, jdbcType=VARCHAR}
 	</select>
 
+	<select id="getOffsetForMedian" resultType="int" parameterType="string">
+		SELECT
+			FLOOR( COUNT(*) / 2)
+		FROM
+			own_brawler AS o
+		INNER JOIN
+			brawler_master AS b
+		ON
+			o.brawler_id = b.id
+		WHERE
+			player_tag = #{playerTag, jdbcType=VARCHAR}
+		GROUP BY
+			b.type
+	</select>
+
+	<select id="getSingleMedian" resultType="int" parameterType="com.example.demo.entity.TrophyMedianEntity">
+		SELECT
+			o.highest_trophies AS median
+		FROM
+			own_brawler AS o
+		INNER JOIN
+			brawler_master AS b
+		ON
+			o.brawler_id = b.id
+		WHERE
+			o.player_tag = #{playerTag, jdbcType=VARCHAR}
+			AND b.type = #{type, jdbcType=VARCHAR}
+		ORDER BY
+			highest_trophies LIMIT 1 OFFSET #{offset, jdbcType=INTEGER}
+	</select>
+
+	<select id="getEntireMedian" resultType="int" parameterType="com.example.demo.entity.TrophyMedianEntity">
+		SELECT
+			o.highest_trophies AS median
+		FROM
+			own_brawler AS o
+		WHERE
+			o.player_tag = #{playerTag, jdbcType=VARCHAR}
+		ORDER BY
+			highest_trophies LIMIT 1 OFFSET #{offset, jdbcType=INTEGER}
+	</select>
 </mapper>
 
