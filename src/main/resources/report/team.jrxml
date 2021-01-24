@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="team" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="60" bottomMargin="20" uuid="2052aabe-13a6-4632-a255-2bb7b1eb69e8">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<import value="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="championshipName" class="java.lang.String"/>
+	<parameter name="date" class="java.lang.String"/>
+	<parameter name="subReport" class="net.sf.jasperreports.engine.JasperReport"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="teamNum" class="java.lang.Integer"/>
+	<field name="teamName" class="java.lang.String"/>
+	<field name="memberList" class="java.util.ArrayList"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="170" splitType="Immediate">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="-15" width="555" height="40" backcolor="#FFCC66" uuid="969e83c1-5174-4bef-b42f-03980fc3e8e8"/>
+			</rectangle>
+			<ellipse>
+				<reportElement x="13" y="71" width="15" height="15" uuid="c4b1305d-0c3a-42c5-85b9-8249a867f952">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</ellipse>
+			<staticText>
+				<reportElement x="33" y="64" width="86" height="30" uuid="bc566b60-1eca-4cff-a922-a7bc674b8333"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="IPAexg" size="16"/>
+				</textElement>
+				<text><![CDATA[開催日時：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="114" width="116" height="30" uuid="5c81c91b-e9ad-4651-8c33-830a4900ef58">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="IPAexg" size="16"/>
+				</textElement>
+				<text><![CDATA[参加チーム：]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement x="13" y="121" width="15" height="15" uuid="8494afd9-986f-44b0-813c-2b04b89a3a18">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</ellipse>
+			<textField>
+				<reportElement x="0" y="-15" width="554" height="38" uuid="80a68bed-1223-4327-b5f8-5b9beb864fc3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="IPAexg" size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{championshipName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="64" width="210" height="30" uuid="b6ab9d1b-36ad-4977-8151-2f6c385bfbec"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="IPAexg" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="65" splitType="Prevent">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<property name="net.sf.jasperreports.export.ignore.page.margins" value="true"/>
+			<subreport>
+				<reportElement key="" isPrintRepeatedValues="false" x="121" y="32" width="319" height="30" isPrintWhenDetailOverflows="true" uuid="f5276933-ebae-42b8-abdd-2f3ab3d76e55">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
+				<subreportParameter name="teamName">
+					<subreportParameterExpression><![CDATA[$F{teamName}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{memberList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement x="121" y="2" width="319" height="30" backcolor="#8AAFFF" uuid="a28117b3-f0fb-4e65-a5d9-fd173bd9ec88"/>
+			</rectangle>
+			<textField>
+				<reportElement x="120" y="2" width="320" height="30" uuid="58bca874-73be-456b-8e45-b25c7b72b5f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="IPAexg" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{teamName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

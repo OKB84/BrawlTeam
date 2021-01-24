@@ -66,6 +66,29 @@ var app = new Vue({
 					console.log(error);
 				});
 		},
+
+		// 大会詳細ダウンロード
+		download: function(championshipId) {
+
+			// 空行クリック時は何もアクションしない
+			if (!championshipId) {
+				return;
+			}
+
+			// 大会IDを元に通信し詳細情報を取得
+			fetch('/api/championship/download/' + championshipId)
+				.then(response => {
+					return response.blob();		// Promiseを返す
+				})
+				.then(blob => {		// JSONデータ
+					var file = window.URL.createObjectURL(blob);
+					window.location.assign(file);
+				})
+				.catch(error => {	// エラーの場合
+					console.log(error);
+				});
+		},
+
 		// 大会削除
 		deleteChampionship: function(championshipId) {
 

@@ -18,6 +18,27 @@
 		<java.version>1.8</java.version>
 	</properties>
 
+	<repositories>
+	    <repository>
+	        <id>jasperreports</id>
+	        <url>http://jasperreports.sourceforge.net/maven2</url>
+	    </repository>
+	    <repository>
+	        <id>jaspersoft-third-party</id>
+	        <url>http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/</url>
+	    </repository>
+	</repositories>
+
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7</version>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -66,6 +87,89 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
 		</dependency>
+	    <dependency> <!-- refered from http://mojo.codehaus.org/jasperreports-maven-plugin/usage.html -->
+	        <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-fonts</artifactId>
+		    <version>6.0.0</version>
+		</dependency>
+		<dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext-pdfa</artifactId>
+			<version>5.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.9</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.itextpdf/itext-asian -->
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>itext-asian</artifactId>
+		    <version>5.2.0</version>
+		</dependency>
+		<dependency>
+			  <groupId>joda-time</groupId>
+			  <artifactId>joda-time</artifactId>
+			  <version>2.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.19</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/jfree/jcommon -->
+		<dependency>
+		    <groupId>jfree</groupId>
+		    <artifactId>jcommon</artifactId>
+		    <version>1.0.8</version>
+		</dependency>
+		 <dependency>
+		      <groupId>com.lowagie</groupId>
+		      <artifactId>itext</artifactId>
+		      <exclusions>
+		         <exclusion>
+		            <artifactId>bcmail-jdk14</artifactId>
+		            <groupId>bouncycastle</groupId>
+		         </exclusion>
+		         <exclusion>
+		            <artifactId>bcprov-jdk14</artifactId>
+		            <groupId>bouncycastle</groupId>
+		         </exclusion>
+		      </exclusions>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.bouncycastle</groupId>
+		      <artifactId>bcmail-jdk14</artifactId>
+		      <version>1.46</version>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.bouncycastle</groupId>
+		      <artifactId>bcprov-jdk14</artifactId>
+		      <version>1.46</version>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.bouncycastle</groupId>
+		      <artifactId>bctsp-jdk14</artifactId>
+		     <version>1.46</version>
+		   </dependency>
+<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+		<dependency>
+		    <groupId>com.lowagie</groupId>
+		    <artifactId>itext</artifactId>
+		    <version>2.1.7</version>
+		</dependency>
 
 	</dependencies>
 
@@ -75,6 +179,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 		</plugins>
 	</build>
 

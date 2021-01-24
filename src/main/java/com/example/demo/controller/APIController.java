@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,7 @@ import com.example.demo.service.ChampionshipService;
 import com.example.demo.service.ClubService;
 import com.example.demo.service.OwnBrawlerService;
 import com.example.demo.service.PlayerService;
+import com.example.demo.service.PrintService;
 import com.example.demo.service.TeamService;
 import com.example.demo.service.UserService;
 
@@ -71,6 +73,8 @@ public class APIController {
 	BrawlerMasterService brawlerMasterService;
 	@Autowired
 	ChampionshipMemberService championshipMemberService;
+	@Autowired
+	PrintService printService;
 
 	@Autowired
 	HttpSession session;
@@ -179,6 +183,21 @@ public class APIController {
 		}
 
 		return teamService.setChampionshipDetail(championshipDetailDto);
+	}
+
+	@GetMapping("/championship/download/{id}")
+	public void getDocument(@PathVariable("id") int id, HttpServletResponse response) {
+
+			// URLの大会IDに一致する且つログイン中のユーザが作成した大会情報詳細を取得
+			ChampionshipDetailDto championshipDetailDto = championshipService.getDetail(id);
+
+			if (championshipDetailDto == null) {
+				return;
+			}
+
+			championshipDetailDto = teamService.setChampionshipDetail(championshipDetailDto);
+
+			printService.printTeamList(championshipDetailDto, response);
 	}
 
 	// メンバー詳細取得
