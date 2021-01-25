@@ -110,7 +110,7 @@ public class BrawlStarsAPIService {
 		    HttpEntity<String> req = new HttpEntity<>(headers);
 		    RestTemplate restTemplate = new RestTemplate();
 
-		    if (StringUtils.equals(SPRING_PROFILES_ACTIVE, "production")) {
+		    if (!StringUtils.equals(SPRING_PROFILES_ACTIVE, "development")) {
 			    config.customize(restTemplate);		// 本番環境では固定IPを利用
 		    }
 
