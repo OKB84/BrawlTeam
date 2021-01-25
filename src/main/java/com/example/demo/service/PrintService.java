@@ -1,9 +1,7 @@
 package com.example.demo.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -42,17 +40,13 @@ public class PrintService {
 			System.out.println("urlMainReport:" + urlMainReport);
 			System.out.println("urlSubReport:" + urlSubReport);
 
-			// テンプレートの読み込み
-			File jasperFile = new File(urlMainReport.toURI());
-			File subReportFile = new File(urlSubReport.toURI());
-
 			// 帳票レイアウトのロード
-			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile.getAbsoluteFile());
+			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(urlMainReport.openStream());
 
 			System.out.println("after load jasperReport");
 
 			// 帳票レイアウトのロード
-			JasperReport subReport = (JasperReport)JRLoader.loadObject(subReportFile.getAbsoluteFile());
+			JasperReport subReport = (JasperReport)JRLoader.loadObject(urlSubReport.openStream());
 
 			// データ作成（パラメータ）
 			HashMap<String,  Object> params = new HashMap<String,  Object>();
@@ -84,9 +78,6 @@ public class PrintService {
 		} catch (JRException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-		} catch (URISyntaxException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
 		}
 	}
 }
