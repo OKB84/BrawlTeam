@@ -29,12 +29,18 @@ public class PrintService {
 
 			System.setProperty("java.awt.headless", "true");
 
+			System.out.println("Before get jasper file");
+
 			// テンプレートの読み込み
 			URL urlMainReport = this.getClass().getResource("/report/team.jasper");
 			URL urlSubReport = this.getClass().getResource("/report/teamList.jasper");
 
+			System.out.println("After get jasper file");
+
 			// 帳票レイアウトのロード
 			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(urlMainReport.openStream());
+
+			System.out.println("After load main jasper file");
 
 			// 帳票レイアウトのロード
 			JasperReport subReport = (JasperReport)JRLoader.loadObject(urlSubReport.openStream());
