@@ -34,9 +34,12 @@ public class PrintService {
 			URL urlMainReport = this.getClass().getResource("/report/team.jasper");
 			URL urlSubReport = this.getClass().getResource("/report/teamList.jasper");
 
+			System.out.println("urlMainReport:" + urlMainReport);
+			System.out.println("urlSubReport:" + urlSubReport);
+
 			// テンプレートの読み込み
-			File jasperFile = new File(urlMainReport.toURI());
-			File subReportFile = new File(urlSubReport.toURI());
+			File jasperFile = new File(urlMainReport.toURI().toString().replaceAll("jar:", "").replaceAll("file:", ""));
+			File subReportFile = new File(urlSubReport.toURI().toString().replaceAll("jar:", "").replaceAll("file:", ""));
 
 			// 帳票レイアウトのロード
 			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile.getAbsoluteFile());
@@ -71,13 +74,14 @@ public class PrintService {
 
 
 		} catch (IOException e) {
+			e.printStackTrace();
 			System.out.print(e.getMessage());
 		} catch (JRException e) {
+			e.printStackTrace();
 			System.out.print(e.getMessage());
 		} catch (URISyntaxException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-
 	}
 }

@@ -192,7 +192,6 @@ public class APIController {
 			ChampionshipDetailDto championshipDetailDto = championshipService.getDetail(id);
 
 			if (championshipDetailDto == null) {
-				System.out.println("return null");
 				return;
 			}
 
