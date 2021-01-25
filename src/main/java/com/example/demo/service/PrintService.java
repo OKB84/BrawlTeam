@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -36,15 +37,15 @@ public class PrintService {
 
 			System.setProperty("java.awt.headless", "true");
 
-			URL urlMainReport = resourceLoader.getResource("classpath:" + "/report/team.jasper").getURL();
-			URL urlSubReport = resourceLoader.getResource("classpath:" + "/report/teamList.jasper").getURL();
+			URL urlMainReport = this.getClass().getResource("/report/team.jasper");
+			URL urlSubReport = this.getClass().getResource("/report/teamList.jasper");
 
 			System.out.println("urlMainReport:" + urlMainReport);
 			System.out.println("urlSubReport:" + urlSubReport);
 
 			// テンプレートの読み込み
-			File jasperFile = new File(urlMainReport.toURI());
-			File subReportFile = new File(urlSubReport.toURI());
+			File jasperFile = new File(new URI(urlMainReport.toString().replaceAll("jar:", "")));
+			File subReportFile = new File(new URI(urlSubReport.toString().replaceAll("jar:", "")));
 
 			// 帳票レイアウトのロード
 			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile.getAbsoluteFile());
