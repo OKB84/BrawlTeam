@@ -11,6 +11,8 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.controller.dto.ChampionshipDetailDto;
@@ -26,20 +28,23 @@ import net.sf.jasperreports.engine.util.JRLoader;
 @Service
 public class PrintService {
 
+	@Autowired
+	ResourceLoader resourceLoader;
+
 	public void printTeamList(ChampionshipDetailDto dto, HttpServletResponse response) {
 		try {
 
 			System.setProperty("java.awt.headless", "true");
 
-			URL urlMainReport = this.getClass().getResource("/report/team.jasper");
-			URL urlSubReport = this.getClass().getResource("/report/teamList.jasper");
+			URL urlMainReport = resourceLoader.getResource("classpath:" + "/report/team.jasper").getURL();
+			URL urlSubReport = resourceLoader.getResource("classpath:" + "/report/teamList.jasper").getURL();
 
 			System.out.println("urlMainReport:" + urlMainReport);
 			System.out.println("urlSubReport:" + urlSubReport);
 
 			// テンプレートの読み込み
-			File jasperFile = new File(urlMainReport.toURI().toString().replaceAll("jar:", "").replaceAll("file:", ""));
-			File subReportFile = new File(urlSubReport.toURI().toString().replaceAll("jar:", "").replaceAll("file:", ""));
+			File jasperFile = new File(urlMainReport.toURI());
+			File subReportFile = new File(urlSubReport.toURI());
 
 			// 帳票レイアウトのロード
 			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile.getAbsoluteFile());
