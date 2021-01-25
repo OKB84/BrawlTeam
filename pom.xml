@@ -90,7 +90,7 @@
 	    <dependency> <!-- refered from http://mojo.codehaus.org/jasperreports-maven-plugin/usage.html -->
 	        <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>5.1.0</version>
+            <version>6.16.0</version>
         </dependency>
 		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts -->
 		<dependency>
