@@ -81,8 +81,9 @@ var app = new Vue({
 					return response.blob();		// Promiseを返す
 				})
 				.then(blob => {		// JSONデータ
-					var file = window.URL.createObjectURL(blob);
-					window.location.assign(file);
+					let anchor = document.createElement("a");
+					anchor.href = window.URL.createObjectURL(blob);
+					anchor.click();
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);
