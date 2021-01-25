@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -30,14 +30,14 @@ public class PrintService {
 			System.setProperty("java.awt.headless", "true");
 
 			// テンプレートの読み込み
-			File jasperFile = new File("src/main/resources/report/team.jasper");
-			File subReportFile = new File("src/main/resources/report/teamList.jasper");
+			URL urlMainReport = this.getClass().getResource("/report/team.jasper");
+			URL urlSubReport = this.getClass().getResource("/report/teamList.jasper");
 
 			// 帳票レイアウトのロード
-			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile.getAbsoluteFile());
+			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(urlMainReport.openStream());
 
 			// 帳票レイアウトのロード
-			JasperReport subReport = (JasperReport)JRLoader.loadObject(subReportFile.getAbsoluteFile());
+			JasperReport subReport = (JasperReport)JRLoader.loadObject(urlSubReport.openStream());
 
 			// データ作成（パラメータ）
 			HashMap<String,  Object> params = new HashMap<String,  Object>();
