@@ -81,9 +81,16 @@ var app = new Vue({
 					return response.blob();		// Promiseを返す
 				})
 				.then(blob => {		// JSONデータ
-					let anchor = document.createElement("a");
-					anchor.href = window.URL.createObjectURL(blob);
-					anchor.click();
+					const url = URL.createObjectURL(blob);
+					const a = document.createElement("a");
+					document.body.appendChild(a);
+					a.download = 'championship' + championshipId + '.pdf';
+					a.href = url;
+					a.click();
+					a.remove();
+					setTimeout(() => {
+					    URL.revokeObjectURL(url);
+					}, 1E4);
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);

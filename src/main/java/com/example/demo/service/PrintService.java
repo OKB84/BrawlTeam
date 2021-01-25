@@ -57,6 +57,8 @@ public class PrintService {
 										params,
 										new JRBeanCollectionDataSource(dto.getTeamList()));
 
+			System.out.println(print);
+
 		    response.setContentType("application/x-download");
 		    response.addHeader("Content-disposition", "attachment; filename=championship" + dto.getId() + ".pdf");
 		    OutputStream out = response.getOutputStream();
