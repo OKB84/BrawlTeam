@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -29,21 +31,20 @@ public class PrintService {
 
 			System.setProperty("java.awt.headless", "true");
 
-			System.out.println("Before get jasper file");
-
-			// テンプレートの読み込み
 			URL urlMainReport = this.getClass().getResource("/report/team.jasper");
 			URL urlSubReport = this.getClass().getResource("/report/teamList.jasper");
 
-			System.out.println("After get jasper file");
+			// テンプレートの読み込み
+			File jasperFile = new File(urlMainReport.toURI());
+			File subReportFile = new File(urlSubReport.toURI());
 
 			// 帳票レイアウトのロード
-			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(urlMainReport.openStream());
+			JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile.getAbsoluteFile());
 
-			System.out.println("After load main jasper file");
+			System.out.println("after load jasperReport");
 
 			// 帳票レイアウトのロード
-			JasperReport subReport = (JasperReport)JRLoader.loadObject(urlSubReport.openStream());
+			JasperReport subReport = (JasperReport)JRLoader.loadObject(subReportFile.getAbsoluteFile());
 
 			// データ作成（パラメータ）
 			HashMap<String,  Object> params = new HashMap<String,  Object>();
@@ -63,8 +64,6 @@ public class PrintService {
 										params,
 										new JRBeanCollectionDataSource(dto.getTeamList()));
 
-			System.out.println(print);
-
 		    response.setContentType("application/x-download");
 		    response.addHeader("Content-disposition", "attachment; filename=championship" + dto.getId() + ".pdf");
 		    OutputStream out = response.getOutputStream();
@@ -75,6 +74,9 @@ public class PrintService {
 			System.out.print(e.getMessage());
 		} catch (JRException e) {
 			System.out.print(e.getMessage());
+		} catch (URISyntaxException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
 		}
 
 	}
