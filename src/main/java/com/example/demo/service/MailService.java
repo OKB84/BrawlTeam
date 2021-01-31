@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.controller.dto.ChampionshipReminderDto;
 
+/**
+ * @author root1
+ * メール送信処理に関するサービスクラス
+ */
 @Service
 public class MailService {
 
