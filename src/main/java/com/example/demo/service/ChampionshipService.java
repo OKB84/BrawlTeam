@@ -17,6 +17,7 @@ import com.example.demo.controller.dto.ChampionshipDateFormatedDto;
 import com.example.demo.controller.dto.ChampionshipDetailDto;
 import com.example.demo.controller.dto.ChampionshipDto;
 import com.example.demo.controller.dto.ChampionshipMemberDto;
+import com.example.demo.controller.dto.ChampionshipReminderDto;
 import com.example.demo.controller.dto.TeamDto;
 import com.example.demo.entity.BelongTeamEntity;
 import com.example.demo.entity.ChampionshipEntity;
@@ -162,6 +163,11 @@ public class ChampionshipService {
 		successCount += championshipMapper.deleteBeforeUpdate(dto);
 
 		return successCount;
+	}
+
+	// 明日の大会の作成者情報を取得
+	public List<ChampionshipReminderDto> getTomorrowChampionship() {
+		return championshipMapper.getTomorrowChampionship();
 	}
 
 	// 大会情報の新規作成及び更新時にチーム及びメンバー情報を登録

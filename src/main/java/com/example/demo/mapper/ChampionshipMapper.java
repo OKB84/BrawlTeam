@@ -8,6 +8,7 @@ import com.example.demo.controller.dto.ChampionshipCreateDto;
 import com.example.demo.controller.dto.ChampionshipDateFormatedDto;
 import com.example.demo.controller.dto.ChampionshipDetailDto;
 import com.example.demo.controller.dto.ChampionshipDto;
+import com.example.demo.controller.dto.ChampionshipReminderDto;
 import com.example.demo.entity.ChampionshipEntity;
 
 /**
@@ -21,6 +22,8 @@ public interface ChampionshipMapper {
 	public int create(ChampionshipCreateDto dto);
 
 	public int getCreatedId(ChampionshipCreateDto dto);
+
+	public List<ChampionshipReminderDto> getTomorrowChampionship();
 
 	public List<ChampionshipDetailDto> getDetail(ChampionshipCreateDto dto);
 

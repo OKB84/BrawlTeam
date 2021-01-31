@@ -34,6 +34,41 @@
 			date DESC
 	</select>
 
+	<!-- 本番環境DBではタイムゾーン設定が不可のため9時間プラスして33時間 -->
+	<select id="getTomorrowChampionship" resultType="com.example.demo.controller.dto.ChampionshipReminderDto">
+		SELECT
+			c.name AS championship_name,
+			c.date,
+			u.player_tag,
+			u.social_media,
+			u.social_media_id,
+			u.name AS user_name,
+			u.email,
+			u.admin
+		FROM
+			user AS u
+		INNER JOIN
+			championship AS c
+		ON
+			u.id = c.organizer_id
+		WHERE
+			DATE(c.date) = DATE(CURRENT_TIMESTAMP() + INTERVAL 33 HOUR)
+	</select>
+
+	<select id="getOrganizerEmail" resultType="string" parameterType="int">
+		SELECT
+			u.name,
+			u.email
+		FROM
+			user AS u
+		INNER JOIN
+			championship AS c
+		ON
+			u.id = c.organizer_id
+		WHERE
+			c.id = #{id, jdbcType=INTEGER}
+	</select>
+
 	<select id="getCreatedId" resultType="int" parameterType="com.example.demo.controller.dto.ChampionshipCreateDto">
 		SELECT
 			id
