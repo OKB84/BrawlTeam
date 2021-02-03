@@ -18,6 +18,8 @@ import com.example.demo.controller.dto.ChampionshipDetailDto;
 import com.example.demo.controller.dto.ChampionshipDto;
 import com.example.demo.controller.dto.ChampionshipMemberDto;
 import com.example.demo.controller.dto.ChampionshipReminderDto;
+import com.example.demo.controller.dto.LeagueRoundDto;
+import com.example.demo.controller.dto.RoundMatchDto;
 import com.example.demo.controller.dto.TeamDetailDto;
 import com.example.demo.controller.dto.TeamDto;
 import com.example.demo.entity.BelongTeamEntity;
@@ -172,11 +174,12 @@ public class ChampionshipService {
 	}
 
 	// リーグ戦の組み合わせを作成
-	public List<List<TeamDetailDto[]>> createLeagueMatchPattern(ChampionshipDetailDto championshipDetailDto) {
+	public List<LeagueRoundDto> createLeagueMatchPattern(ChampionshipDetailDto championshipDetailDto) {
 
 		// 大会参加チームのリストを取得（newしない場合、空のチームが追加されたまま大会詳細表示されてしまう）
 		List<TeamDetailDto> teamList = new ArrayList<TeamDetailDto>(championshipDetailDto.getTeamList());
 
+		// 参加チーム数が1の場合は対戦表が作成できないためnullを返却
 		if (teamList.size() < 2) {
 			return null;
 		}
@@ -192,27 +195,33 @@ public class ChampionshipService {
 		List<TeamDetailDto> teamList1 = new ArrayList<TeamDetailDto>(teamList.subList(0, listSize / 2));
 		List<TeamDetailDto> teamList2 = new ArrayList<TeamDetailDto>(teamList.subList(listSize / 2, listSize));
 
-		List<List<TeamDetailDto[]>> leagueMatch = new ArrayList<List<TeamDetailDto[]>>();	// 戻り値初期化
+		List<LeagueRoundDto> leagueRoundList = new ArrayList<LeagueRoundDto>();	// 戻り値初期化
 
 		// 半分に分割したチームリストを入れ替えながら全ての対戦カードを網羅してリーグ戦の組み合わせを作成
 		for(int i = 0; i < listSize - 1; i++) {
 
-			List<TeamDetailDto[]> round = new ArrayList<TeamDetailDto[]>();		// 各「〜回戦」の対戦カード配列
+			LeagueRoundDto leagueRoundDto = new LeagueRoundDto();	// 各ラウンドのラウンド数と対戦カードリスト
+			leagueRoundDto.setRoundNumber(i + 1);					// ラウンド数をセット
+
+			List<RoundMatchDto> roundMatchList = new ArrayList<RoundMatchDto>();	// 対戦カードリスト
 
 			for (int j = 0; j < listSize / 2; j++) {	// 分割されたリスト内の各チームの対戦カード作成
 
-				TeamDetailDto matchInRound[] = new TeamDetailDto[2];	// 1試合の対戦カード
+				RoundMatchDto roundMatchDto = new RoundMatchDto();	// ラウンド
 
 				// 参加チーム数が奇数のために水増ししたチームについては、対戦カードに含めない
 				if (teamList1.get(j).getTeamName() != null && teamList2.get(j).getTeamName() != null) {
-					matchInRound[0] = teamList1.get(j);
-					matchInRound[1] = teamList2.get(j);
-					round.add(matchInRound);	// 各「〜回戦」の対戦カード配列に1試合分のカードを追加
+					roundMatchDto.setTeamName1(teamList1.get(j).getTeamName());
+					roundMatchDto.setTeamName2(teamList2.get(j).getTeamName());
+					roundMatchList.add(roundMatchDto);	// 各「〜回戦」の対戦カード配列に1試合分のカードを追加
 				}
 			}
 
 			// 全対戦カード配列に各「〜回戦」の対戦カード配列を追加
-			leagueMatch.add(round);
+			leagueRoundDto.setMatchList(roundMatchList);
+
+			// 対戦カードを含むラウンド情報をリーグ情報に追加
+			leagueRoundList.add(leagueRoundDto);
 
 			// 分割チーム同士のチーム入れ替え処理における入れ替え対象チーム
 			TeamDetailDto tempTeam1 = teamList1.get(listSize / 2 - 1);
@@ -230,7 +239,8 @@ public class ChampionshipService {
 			teamList2.add(tempTeam1);
 		}
 
-		return leagueMatch;
+		System.out.println(leagueRoundList);
+		return leagueRoundList;
 	}
 
 	// 大会情報の新規作成及び更新時にチーム及びメンバー情報を登録

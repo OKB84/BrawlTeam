@@ -29,6 +29,7 @@ import com.example.demo.controller.dto.ChampionshipDto.UpdateGroup;
 import com.example.demo.controller.dto.ChampionshipMemberDto;
 import com.example.demo.controller.dto.ClubPlayerAPIDto;
 import com.example.demo.controller.dto.ErrorResponseDto;
+import com.example.demo.controller.dto.LeagueRoundDto;
 import com.example.demo.controller.dto.PlayerDetailDto;
 import com.example.demo.controller.dto.PlayerInfoDto;
 import com.example.demo.controller.dto.PlayerTagDto;
@@ -185,19 +186,40 @@ public class APIController {
 		return teamService.setChampionshipDetail(championshipDetailDto);
 	}
 
+	// リーグ戦の対戦表ダウンロード
+	@GetMapping("/championship/league/{id}")
+	public void getLeagueMatchPattern(@PathVariable("id") int id, HttpServletResponse response) {
+
+		// URLの大会IDに一致する且つログイン中のユーザが作成した大会情報詳細を取得
+		ChampionshipDetailDto championshipDetailDto = championshipService.getDetail(id);
+
+		if (championshipDetailDto == null) {
+			return;
+		}
+
+		championshipDetailDto = teamService.setChampionshipDetail(championshipDetailDto);
+
+		// リーグ戦の対戦リストを作成
+		List<LeagueRoundDto> leagueMatchList = championshipService.createLeagueMatchPattern(championshipDetailDto);
+
+		// 対戦表を印刷
+		printService.printLeagueMatchPattern(leagueMatchList, response);
+	}
+
+	// チームメンバー表ダウンロード
 	@GetMapping("/championship/download/{id}")
 	public void getDocument(@PathVariable("id") int id, HttpServletResponse response) {
 
-			// URLの大会IDに一致する且つログイン中のユーザが作成した大会情報詳細を取得
-			ChampionshipDetailDto championshipDetailDto = championshipService.getDetail(id);
+		// URLの大会IDに一致する且つログイン中のユーザが作成した大会情報詳細を取得
+		ChampionshipDetailDto championshipDetailDto = championshipService.getDetail(id);
 
-			if (championshipDetailDto == null) {
-				return;
-			}
+		if (championshipDetailDto == null) {
+			return;
+		}
 
-			championshipDetailDto = teamService.setChampionshipDetail(championshipDetailDto);
+		championshipDetailDto = teamService.setChampionshipDetail(championshipDetailDto);
 
-			printService.printTeamList(championshipDetailDto, response);
+		printService.printTeamList(championshipDetailDto, response);
 	}
 
 	// メンバー詳細取得
