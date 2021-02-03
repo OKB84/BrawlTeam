@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="match" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b92b530d-e922-453e-8f39-87ad38a01f95">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="teamName1" class="java.lang.String"/>
+	<field name="teamName2" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="55" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="310" height="30" uuid="4ef108ad-1e26-464b-a16f-b18cc15c4dc5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="IPAexg" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{teamName1} + " V.S. " + $F{teamName2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
