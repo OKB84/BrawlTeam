@@ -67,8 +67,8 @@ var app = new Vue({
 				});
 		},
 
-		// 大会詳細ダウンロード
-		download: function(championshipId) {
+		// チーム表ダウンロード
+		downloadTeamList: function(championshipId) {
 
 			// 空行クリック時は何もアクションしない
 			if (!championshipId) {
@@ -97,29 +97,50 @@ var app = new Vue({
 				});
 		},
 
+		// リーグ表ダウンロード
+		downloadMatchList: function(championshipId) {
+
+			// 空行クリック時は何もアクションしない
+			if (!championshipId) {
+				return;
+			}
+
+			// 大会IDを元に通信し詳細情報を取得
+			fetch('/api/championship/league/' + championshipId)
+				.then(response => {
+					return response.blob();		// Promiseを返す
+				})
+				.then(blob => {		// JSONデータ
+					const url = URL.createObjectURL(blob);
+					const a = document.createElement("a");
+					document.body.appendChild(a);
+					a.download = 'championship' + championshipId + '.pdf';
+					a.href = url;
+					a.click();
+					a.remove();
+					setTimeout(() => {
+					    URL.revokeObjectURL(url);
+					}, 1E4);
+				})
+				.catch(error => {	// エラーの場合
+					console.log(error);
+				});
+		},
+
 		// 大会削除
-		deleteChampionship: function(championshipId) {
+		deleteChampionship: function() {
 
 			let deleteChampionshipList = [];
 
-			if (championshipId != null) {
-				deleteChampionshipList.push({id: Number(championshipId)});
-				if (!confirm("この大会を削除しますか？")) {
-					return;
-				}
-			} else {
-				deleteChampionshipList = this.championshipList.filter(c => c.checked === true);
-				if (deleteChampionshipList.length === 0) {
-					alert("削除する大会を選択してください。");
-					return;
-				}
-
-				if (!confirm("選択中の大会を削除しますか？")) {
-					return;
-				}
+			deleteChampionshipList = this.championshipList.filter(c => c.checked === true);
+			if (deleteChampionshipList.length === 0) {
+				alert("削除する大会を選択してください。");
+				return;
 			}
 
-
+			if (!confirm("選択中の大会を削除しますか？")) {
+				return;
+			}
 
 			// FetchAPIのオプション準備
 			const param  = {

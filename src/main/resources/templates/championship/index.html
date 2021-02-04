@@ -86,9 +86,9 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-	 							<button @click="download(championshipDetail.id)" type="button" class="btn btn-secondary"><i class="fas fa-download"></i> ダウンロード</button>
+	 							<button @click="downloadTeamList(championshipDetail.id)" type="button" class="btn btn-secondary"><i class="fas fa-download"></i> チーム表</button>
+	 							<button @click="downloadMatchList(championshipDetail.id)" type="button" class="btn btn-info"><i class="fas fa-download"></i> リーグ表</button>
 								<button @click="moveToEdit(championshipDetail.id)" type="button" class="btn btn-warning"><i class="fas fa-edit"></i> 編集</button>
-								<button @click="deleteChampionship(championshipDetail.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i> 削除</button>
 							</div>
 						</div>
 					</div>
@@ -101,6 +101,6 @@
 	<!-- Vue js関係はheadタグ内でテンプレートに渡そうとすると正しく動作しなかった -->
 	<script src="https://unpkg.com/vuejs-paginate@2.1.0"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-	<script type="text/javascript" src="/js/championship/index.js?20210125"></script>
+	<script type="text/javascript" src="/js/championship/index.js?20210204"></script>
 </body>
 </html>

@@ -10,14 +10,29 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="55" splitType="Stretch">
+		<band height="45" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
-				<reportElement x="0" y="0" width="310" height="30" uuid="4ef108ad-1e26-464b-a16f-b18cc15c4dc5"/>
+				<reportElement x="50" y="7" width="190" height="30" uuid="4ef108ad-1e26-464b-a16f-b18cc15c4dc5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="IPAexg" size="12"/>
+					<font fontName="IPAexg" size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{teamName1} + " V.S. " + $F{teamName2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{teamName1}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="320" y="6" width="190" height="30" uuid="2515aefb-4a4d-40e2-a8f4-f64ef524aa61"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="IPAexg" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{teamName2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="260" y="6" width="40" height="30" uuid="d82667a4-081c-4881-a25f-137aa89384bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="IPAexg" size="14"/>
+				</textElement>
+				<text><![CDATA[V.S.]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
