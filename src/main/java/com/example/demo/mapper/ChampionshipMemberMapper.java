@@ -16,7 +16,7 @@ public interface ChampionshipMemberMapper {
 
 	public int create(ChampionshipMemberEntity entity);
 
-	public List<String> search(int userId);
+	public List<String> searchByUserId(int userId);
 
 	public int delete(ChampionshipMemberEntity entity);
 

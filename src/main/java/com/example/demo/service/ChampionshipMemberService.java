@@ -50,7 +50,7 @@ public class ChampionshipMemberService {
 	// 検索
 	public List<String> search() {
 		// ログイン中のユーザIDでDB検索
-		return mapper.search((Integer)session.getAttribute("userId"));
+		return mapper.searchByUserId((Integer)session.getAttribute("userId"));
 	}
 
 	// 削除

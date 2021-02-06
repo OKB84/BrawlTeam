@@ -28,7 +28,7 @@
 		)
 	</insert>
 
-	<select id="search" resultType="string" parameterType="int">
+	<select id="searchByUserId" resultType="string" parameterType="int">
 		SELECT
 			member_player_tag
 		FROM

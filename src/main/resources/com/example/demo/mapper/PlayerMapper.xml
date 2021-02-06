@@ -94,16 +94,6 @@
 			p.trophies DESC
 	</select>
 
-<!-- クラブ内のプレイヤーのみで大会開催という仕様を想定していた時の実装 -->
-<!-- 	<select id="getCurrentClubPlayerTag" resultType="string" parameterType="string">
-		SELECT
-			player_tag
-		FROM
-			player
-		WHERE
-			club_tag = #{clubTag, jdbcType=VARCHAR}
-	</select> -->
-
 	<update id="update" parameterType="com.example.demo.entity.PlayerEntity">
 		UPDATE
 			player

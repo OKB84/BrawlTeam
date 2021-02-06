@@ -20,9 +20,6 @@ public interface PlayerMapper {
 
 	public List<ChampionshipMemberDto> getMembersPlayerInfo(int userId);
 
-//  所属クラブ内の	プレイヤーのみで大会開催という仕様の時代で使っていたメソッド
-//	public List<String> getCurrentClubPlayerTag(String clubTag);
-
 	public int update(PlayerEntity entity);
 
 	public PlayerEntity searchByPlayerTag(String playerTag);
