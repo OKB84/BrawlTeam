@@ -5,7 +5,7 @@ Vue.component('paginate', VuejsPaginate);
 var app = new Vue({
 	el: '#app',
 	data: {
-		playerList: [],				// 大会参加候補メンバー
+		playerList: [],				// 大会参加候補全メンバー
 		playerDetail: {},			// プレイヤー詳細情報
 		chartLoaded: false,			// 詳細レーダーチャートの表示切り替え
 		doughnutChartLoaded: false,		// ドーナツチャートの表示切り替え
@@ -17,7 +17,8 @@ var app = new Vue({
 		playerTagError: '',			// メンバー追加時のエラーメッセージ
 		importError: '',			// クラブメンバーインポート時のエラーメッセージ
 		showUpdatingModal: false,	// API通信中のモーダルの表示切り替え
-		modalUpdatingMessage: ''	// API通信中のモーダル中のメッセージ
+		modalUpdatingMessage: '',	// API通信中のモーダル中のメッセージ
+		searchWord: ''				// 検索ワード
 	},
 	/*
 	ページロード時にメンバー一覧を取得
@@ -33,8 +34,14 @@ var app = new Vue({
 		getPlayerList: function() {
 			let current = this.currentPage * this.parPage;
 			let start = current - this.parPage;
-			let currentList = this.playerList.slice(start, current);
+
+			let currentList = this.playerList
+									// 検索ワードによるフィルター（ページロード時にplayerListが空の状態からスタートするためplayer.nameによる条件分岐付き）
+									.filter(player => player.name ? player.name.toLowerCase().indexOf(this.searchWord) > -1 : true)
+									.slice(start, current);
+
 			const listLength = currentList.length;
+
 			if (listLength < this.parPage) {
 				for (let i = 0; i < this.parPage - listLength; i++) {
 					currentList.push({});
@@ -44,18 +51,22 @@ var app = new Vue({
 		},
 		// 現在のページ数を返す
 		getPageCount: function() {
-			return Math.ceil(this.playerList.length / this.parPage);
-		}
+			// 検索ワードによるフィルター（ページロード時にplayerListが空の状態からスタートするためplayer.nameによる条件分岐付き）
+			return Math.ceil(this.playerList.filter(player => player.name ? player.name.toLowerCase().indexOf(this.searchWord) > -1 : true)
+								.length / this.parPage);
+		},
+
 	},
-	/*
-	追加モーダルの非表示時にエラーメッセージと入力値をクリアする
- 	*/
 	watch: {
+		// 追加モーダルの非表示時にエラーメッセージと入力値をクリアする
 		showModalAdd: function() {
 			if (!this.showModalAdd) {
 				this.eraseErrorMessage();
 				this.playerTag = '';
 			}
+		},
+		searchWord: function() {
+			this.currentPage = 1;
 		}
 	},
 
@@ -68,6 +79,7 @@ var app = new Vue({
 				})
 				.then(data => {		// JSONデータ
 					this.playerList = data;
+
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);
