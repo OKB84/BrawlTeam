@@ -21,8 +21,8 @@
 						<thead>
 							<tr>
 								<th>名前</th>
-								<th>トロフィー数</th>
-								<th>キャラクター数</th>
+								<th @click="sortBy('trophies')">トロフィー数 <i class="fas fa-sort"></i></th>
+								<th @click="sortBy('numOfBrawler')">キャラクター数 <i class="fas fa-sort"></i></th>
 								<th></th>
 							</tr>
 						</thead>
@@ -39,9 +39,13 @@
 							</tr>
 						</tbody>
 					</table>
+					<!--
+						:force-pageを設定しないと、3ページ目にいる時に検索ワードを入れるとアクティブページが1ページ目にならない。
+					 -->
 					<paginate
 						:page-count="getPageCount"
 						:page-range="3"
+						:force-page="currentPage"
 						:margin-pages="2"
 						:click-handler="clickCallback"
 						:prev-text="'＜'"
@@ -118,6 +122,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 	<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
-	<script type="text/javascript" src="/js/championship-member/index.js?20210206"></script>
+	<script type="text/javascript" src="/js/championship-member/index.js?20210207"></script>
 </body>
 </html>

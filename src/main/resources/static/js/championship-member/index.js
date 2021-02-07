@@ -18,7 +18,9 @@ var app = new Vue({
 		importError: '',			// クラブメンバーインポート時のエラーメッセージ
 		showUpdatingModal: false,	// API通信中のモーダルの表示切り替え
 		modalUpdatingMessage: '',	// API通信中のモーダル中のメッセージ
-		searchWord: ''				// 検索ワード
+		searchWord: '',				// 検索ワード
+		sortKey: 'trophies',		// ソート対象の列名
+		sortAscFlag: false			// ソートの昇順フラグ
 	},
 	/*
 	ページロード時にメンバー一覧を取得
@@ -30,18 +32,28 @@ var app = new Vue({
 	ページネーションに必要な計算を行う
  	*/
 	computed: {
+
 		// 現在のページに表示する大会情報を返す
 		getPlayerList: function() {
-			let current = this.currentPage * this.parPage;
-			let start = current - this.parPage;
+			const current = this.currentPage * this.parPage;
+			const start = current - this.parPage;
+
+			// ソート順を考慮
+			const sortReverse = this.sortAscFlag ? 1 : -1;
 
 			let currentList = this.playerList
-									// 検索ワードによるフィルター（ページロード時にplayerListが空の状態からスタートするためplayer.nameによる条件分岐付き）
-									.filter(player => player.name ? player.name.toLowerCase().indexOf(this.searchWord) > -1 : true)
+									// 検索ワードによるフィルター
+									// ページロード時にplayerListが空の状態からスタートするためplayer.nameによる条件分岐付き
+									.filter(player => player.name ?
+											player.name.toLowerCase().indexOf(this.searchWord) > -1
+											: true)
+									// 昇順・降順で並び替え
+									.sort((a, b) => (a[this.sortKey] - b[this.sortKey]) * sortReverse)
 									.slice(start, current);
 
 			const listLength = currentList.length;
 
+			// データがない行は空行で埋める
 			if (listLength < this.parPage) {
 				for (let i = 0; i < this.parPage - listLength; i++) {
 					currentList.push({});
@@ -49,13 +61,18 @@ var app = new Vue({
 			}
 			return currentList;
 		},
-		// 現在のページ数を返す
+		// 総ページ数を返す
 		getPageCount: function() {
-			// 検索ワードによるフィルター（ページロード時にplayerListが空の状態からスタートするためplayer.nameによる条件分岐付き）
-			return Math.ceil(this.playerList.filter(player => player.name ? player.name.toLowerCase().indexOf(this.searchWord) > -1 : true)
-								.length / this.parPage);
-		},
 
+			// 検索ワードによるフィルター（ページロード時にplayerListが空の状態からスタートするためplayer.nameによる条件分岐付き）
+			return Math.ceil(this.playerList
+									// 検索ワードによるフィルター
+									// ページロード時にplayerListが空の状態からスタートするためplayer.nameによる条件分岐付き
+									.filter(player => player.name ?
+											player.name.toLowerCase().indexOf(this.searchWord) > -1
+											: true)
+									.length / this.parPage);
+		}
 	},
 	watch: {
 		// 追加モーダルの非表示時にエラーメッセージと入力値をクリアする
@@ -65,6 +82,7 @@ var app = new Vue({
 				this.playerTag = '';
 			}
 		},
+		// 検索結果はページネーションの先頭から表示する
 		searchWord: function() {
 			this.currentPage = 1;
 		}
@@ -155,6 +173,17 @@ var app = new Vue({
 					console.log(error);
 				});
 
+		},
+
+		// テーブル表示並び替え
+		sortBy: function(key) {
+
+			// 同じ列名をクリックした場合のみ昇順・降順が切り替わる
+			this.sortKey === key
+				? (this.sortAscFlag = !this.sortAscFlag)
+				: (this.sortAscFlag = false);
+
+			this.sortKey = key;		// ソートする列名をセット
 		},
 
 		// レーダーチャート描画（大会新規作成、編集画面とソース重複状態）
