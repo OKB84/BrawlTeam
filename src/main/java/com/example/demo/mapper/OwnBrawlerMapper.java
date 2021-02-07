@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.demo.controller.dto.OffsetForMedianDto;
 import com.example.demo.entity.OwnBrawlerEntity;
 import com.example.demo.entity.TrophyMedianEntity;
 
@@ -19,7 +20,7 @@ public interface OwnBrawlerMapper {
 
 	public List<String> search(String playerTag);
 
-	public List<Integer> getOffsetForMedian(String playerTag);
+	public List<OffsetForMedianDto> getOffsetForMedian(String playerTag);
 
 	public int getSingleMedian(TrophyMedianEntity entity);
 

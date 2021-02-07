@@ -130,33 +130,23 @@ public class BrawlStarsAPIService {
 	}
 
 	// プレイヤータグからバトルログを取得
-	public BattleLogAPIDto getBattleLog(String playerTag) {
+	public BattleLogAPIDto getBattleLog(String playerTag) throws HttpClientErrorException {
 
-		try {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Authorization", "Bearer " + API_KEY);
+	    headers.add("Accept", "application/json");
+	    HttpEntity<String> req = new HttpEntity<>(headers);
 
-		    HttpHeaders headers = new HttpHeaders();
-		    headers.add("Authorization", "Bearer " + API_KEY);
-		    headers.add("Accept", "application/json");
-		    HttpEntity<String> req = new HttpEntity<>(headers);
+	    RestTemplate restTemplate = new RestTemplate();
 
-		    RestTemplate restTemplate = new RestTemplate();
+	    if (!StringUtils.equals(SPRING_PROFILES_ACTIVE, "development")) {
+		    config.customize(restTemplate);		// 本番環境では固定IPを利用
+	    }
 
-		    if (!StringUtils.equals(SPRING_PROFILES_ACTIVE, "development")) {
-			    config.customize(restTemplate);		// 本番環境では固定IPを利用
-		    }
-
-		    ResponseEntity<BattleLogAPIDto> res = restTemplate.exchange(
-		    	BASE_URL + "players/" + playerTag + "/battlelog",		// プレイヤータグのシャープはパーセントにしないとエラーになる
-		    	HttpMethod.GET, req, BattleLogAPIDto.class
-		    );
-		    return res.getBody();
-
-		} catch (HttpClientErrorException e) {
-
-			// playerTagに該当するバトルログが見つからなかった場合
-			e.printStackTrace();
-			return null;
-
-		}
+	    ResponseEntity<BattleLogAPIDto> res = restTemplate.exchange(
+	    	BASE_URL + "players/" + playerTag + "/battlelog",		// プレイヤータグのシャープはパーセントにしないとエラーになる
+	    	HttpMethod.GET, req, BattleLogAPIDto.class
+	    );
+	    return res.getBody();
 	}
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.example.demo.controller.dto.ChampionshipDateFormatedDto;
 import com.example.demo.controller.dto.ChampionshipDetailDto;
@@ -227,11 +228,15 @@ public class APIController {
 	PlayerDetailDto getMemberDetail(@PathVariable("playerTag") String playerTag) {
 
 		// 「キャラタイプ別の最多トロフィー中央値」以外の詳細情報を取得
-		PlayerDetailDto dto = playerService.getPlayerDetail("%" + playerTag);
+		PlayerDetailDto dto = playerService.getPlayerBasicDetail("%" + playerTag);
 
-		// 中央値を追加して返却
-		return ownBrawlerService.setMedian(dto);
-
+		try {
+			dto = playerService.setPlayerBattleInfo(dto);
+			// 中央値を追加して返却
+			return ownBrawlerService.setMedian(dto);
+		} catch (HttpClientErrorException e) {
+			return dto;
+		}
 	}
 
 	// 大会情報削除

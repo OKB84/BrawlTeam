@@ -2,10 +2,12 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.controller.dto.BrawlerStat;
+import com.example.demo.controller.dto.OffsetForMedianDto;
 import com.example.demo.controller.dto.PlayerDetailDto;
 import com.example.demo.controller.dto.PlayerInfoDto;
 import com.example.demo.entity.OwnBrawlerEntity;
@@ -76,30 +78,44 @@ public class OwnBrawlerService {
 	    entity.setPlayerTag(playerTag);
 
 	    // 各タイプの所有キャラクター数の半分の値を取得
-	    List<Integer> offsetList = mapper.getOffsetForMedian(playerTag);
+	    List<OffsetForMedianDto> offsetList = mapper.getOffsetForMedian(playerTag);
 
 	    // 各タイプの中央値を取得
-    	entity.setType("1");
-    	entity.setOffset(offsetList.get(0));
-	    dto.setMedianTroLongRange(mapper.getSingleMedian(entity));
-    	entity.setType("2");
-    	entity.setOffset(offsetList.get(1));
-	    dto.setMedianTroLongRangeSupHeavy(mapper.getSingleMedian(entity));
-    	entity.setType("3");
-    	entity.setOffset(offsetList.get(2));
-	    dto.setMedianTroMidRange(mapper.getSingleMedian(entity));
-    	entity.setType("4");
-    	entity.setOffset(offsetList.get(3));
-	    dto.setMedianTroMidRangeSupHeavy(mapper.getSingleMedian(entity));
-    	entity.setType("5");
-    	entity.setOffset(offsetList.get(4));
-	    dto.setMedianTroHeavyWeight(mapper.getSingleMedian(entity));
-    	entity.setType("6");
-    	entity.setOffset(offsetList.get(5));
-	    dto.setMedianTroSemiHeavyWeight(mapper.getSingleMedian(entity));
-    	entity.setType("7");
-    	entity.setOffset(offsetList.get(6));
-	    dto.setMedianTroThrower(mapper.getSingleMedian(entity));
+	    for (OffsetForMedianDto offsetForMedianDto : offsetList) {
+
+	    	entity.setType(offsetForMedianDto.getType());
+	    	entity.setOffset(offsetForMedianDto.getOffsetNum());
+
+	    	int median = mapper.getSingleMedian(entity);
+
+	    	if (StringUtils.equals(offsetForMedianDto.getType(), "1")) {
+	    		dto.setMedianTroLongRange(median);
+	    	}
+
+	    	if (StringUtils.equals(offsetForMedianDto.getType(), "2")) {
+	    	    dto.setMedianTroLongRangeSupHeavy(median);
+	    	}
+
+	    	if (StringUtils.equals(offsetForMedianDto.getType(), "3")) {
+	    	    dto.setMedianTroMidRange(median);
+	    	}
+
+	    	if (StringUtils.equals(offsetForMedianDto.getType(), "4")) {
+	    	    dto.setMedianTroMidRangeSupHeavy(median);
+	    	}
+
+	    	if (StringUtils.equals(offsetForMedianDto.getType(), "5")) {
+	    	    dto.setMedianTroHeavyWeight(median);
+	    	}
+
+	    	if (StringUtils.equals(offsetForMedianDto.getType(), "6")) {
+	    	    dto.setMedianTroSemiHeavyWeight(median);
+	    	}
+
+	    	if (StringUtils.equals(offsetForMedianDto.getType(), "7")) {
+	    	    dto.setMedianTroThrower(median);
+	    	}
+	    }
 
 	    // 全タイプ合計の中央値を取得
 	    entity.setOffset(Math.floorDiv(mapper.search(playerTag).size(), 2));

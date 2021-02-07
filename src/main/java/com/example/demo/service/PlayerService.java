@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.example.demo.controller.dto.BattleLog;
 import com.example.demo.controller.dto.ChampionshipMemberDto;
@@ -79,15 +80,20 @@ public class PlayerService {
 		return mapper.searchByPlayerTag(playerTag);
 	}
 
-	// プレイヤーの詳細情報を取得
-	public PlayerDetailDto getPlayerDetail(String playerTag) {
+	// プレイヤーの詳細情報（バトルログ関連以外）を取得
+	public PlayerDetailDto getPlayerBasicDetail(String playerTag) {
 
 		// バトルログ以外の情報を取得
 		PlayerDetailDto playerDetailDto = mapper.getPlayerDetail(playerTag);
 		playerDetailDto.setPlayerTag(playerTag);
 
-		// 公式APIからバトルログ取得
-		List<BattleLog> battleLogList = brawlStarsService.getBattleLog(playerTag).getItems();
+		return playerDetailDto;
+	}
+
+	// プレイヤーのバトルログ関連情報をDTOにセット
+	public PlayerDetailDto setPlayerBattleInfo(PlayerDetailDto playerDetailDto) throws HttpClientErrorException {
+
+		List<BattleLog> battleLogList = brawlStarsService.getBattleLog(playerDetailDto.getPlayerTag()).getItems();
 
 		// 3on3の勝率を計算してセット
 		playerDetailDto.setVictoryRate(setVictoryRate(battleLogList));
@@ -110,7 +116,6 @@ public class PlayerService {
 				playerDetailDto =  setUseBrawler(playerDetailDto, players);
 			}
 		}
-
 		return playerDetailDto;
 	}
 
@@ -150,7 +155,7 @@ public class PlayerService {
 	}
 
 	// バトルログから3on3の勝率を算出
-	private int setVictoryRate(List<BattleLog> battleLogList) {
+	private String setVictoryRate(List<BattleLog> battleLogList) {
 
 		int battleCounter = 0;		// 3on3のバトル回数
 		int victoryCounter = 0;		// 3on3の勝利回数
@@ -181,7 +186,8 @@ public class PlayerService {
 		}
 
 		// 四捨五入して勝率（パーセント）を返却
-		return Math.round(victoryCounter * 100 / battleCounter);
+		// 3on3が0試合であれば、バーを返却
+		return battleCounter != 0 ? String.valueOf(Math.round(victoryCounter * 100 / battleCounter)) : "-";
 	}
 
 	// DTOからEntityへのデータ詰め替えを共通化したメソッド

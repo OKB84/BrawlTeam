@@ -27,7 +27,7 @@ public class PlayerDetailDto {
 	private int avgTroHeavyWeight;			// 平均最多トロフィー数（タンク）
 	private int avgTroSemiHeavyWeight;		// 平均最多トロフィー数（セミタンク）
 	private int avgTroThrower;				// 平均最多トロフィー数（スローワー）
-	private int victoryRate;				// 3on3勝率（直近最大25試合）
+	private String victoryRate = "-";		// 3on3勝率（直近最大25試合）（3on3が0試合の可能性があるため文字列型）
 	private int useLongRange;				// 直近25試合での使用回数（長距離）
 	private int useLongRangeSupHeavy;		// 直近25試合での使用回数（長距離タンクメタ）
 	private int useMidRange;				// 直近25試合での使用回数（中距離）

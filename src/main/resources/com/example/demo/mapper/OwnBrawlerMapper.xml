@@ -45,9 +45,10 @@
 			player_tag = #{playerTag, jdbcType=VARCHAR}
 	</select>
 
-	<select id="getOffsetForMedian" resultType="int" parameterType="string">
+	<select id="getOffsetForMedian" resultType="com.example.demo.controller.dto.OffsetForMedianDto" parameterType="string">
 		SELECT
-			FLOOR( COUNT(*) / 2)
+			b.type,
+			FLOOR( COUNT(*) / 2) AS offset_num
 		FROM
 			own_brawler AS o
 		INNER JOIN
