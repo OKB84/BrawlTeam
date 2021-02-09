@@ -158,6 +158,8 @@ var app = new Vue({
 				.then(response => {
 					if(response.ok){
 						this.getAllChampionship();
+					} else if (response.status === 405) {
+						alert('大会がすでに削除された可能性があります。\n画面をリロードしてください。')
 					} else {
 						return response.json();		// Promiseを返す
 					}

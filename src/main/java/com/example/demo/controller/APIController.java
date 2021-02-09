@@ -250,7 +250,11 @@ public class APIController {
 
 		int deleteCount = championshipService.delete(list);
 
-		System.out.println(deleteCount);
+		// すでに削除済みの大会だった場合
+		if (deleteCount == 0) {
+			return new ResponseEntity<>(new ArrayList<String>(), HttpStatus.METHOD_NOT_ALLOWED);
+		}
+
 		return new ResponseEntity<>(new ArrayList<String>(), HttpStatus.OK);
 	}
 
