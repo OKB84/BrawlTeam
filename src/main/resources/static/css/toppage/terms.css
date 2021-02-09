@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+.terms-block {
+	margin: 60px 0 80px;
+}
+
+h1 {
+	text-align: center;
+    margin: 0 0 50px 0;
+    font-size: 1.7rem;
+    line-height: 140%;
+}
+
+h2 {
+	margin: 30px 0 20px 0;
+    font-size: 1.1rem;
+    line-height: 140%;
+    color: #202231;
+
+    padding: 0.5rem 1rem;
+	border-bottom: 3px solid #f9bc60;
+	background: #ffd89e61;
+}
+
+p {
+    margin: 20px 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+li {
+	list-style: outside decimal;
+    font-size: 0.85rem;
+    line-height: 140%;
+    margin: 10px 0 0 0;
+}
+
+

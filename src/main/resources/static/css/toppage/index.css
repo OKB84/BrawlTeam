@@ -60,3 +60,13 @@
 .g-signin2 {
 	padding-top: 1rem;
 }
+
+.terms-link {
+	text-decoration: underline;
+	transition: color .3s;
+}
+
+.terms-link:hover {
+	text-decoration: underline;
+	color:#999;
+}

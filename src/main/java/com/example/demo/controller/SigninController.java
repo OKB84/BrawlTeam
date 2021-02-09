@@ -43,6 +43,12 @@ public class SigninController {
 		return "toppage/index";
 	}
 
+	// 利用規約表示
+	@GetMapping("/terms")
+	String terms() {
+		return "toppage/terms";
+	}
+
 	// ログアウト
 	@GetMapping("/signout")
 	String getSignout() {
