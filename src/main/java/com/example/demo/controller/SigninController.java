@@ -49,6 +49,12 @@ public class SigninController {
 		return "toppage/terms";
 	}
 
+	// プライバシーポリシー表示
+	@GetMapping("/policy")
+	String policy() {
+		return "toppage/policy";
+	}
+
 	// ログアウト
 	@GetMapping("/signout")
 	String getSignout() {

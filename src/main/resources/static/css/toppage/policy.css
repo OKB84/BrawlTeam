@@ -18,8 +18,8 @@ h2 {
     color: #202231;
 
     padding: 0.5rem 1rem;
-	border-bottom: 3px solid #f9bc60;
-	background: #ffd89e61;
+	border-bottom: 3px solid #516ab6;
+	background: #c2edff;
 }
 
 p {
@@ -34,14 +34,3 @@ li {
     line-height: 140%;
     margin: 10px 0 0 0;
 }
-
-.policy-link {
-	text-decoration: underline;
-	transition: color .3s;
-}
-
-.policy-link:hover {
-	text-decoration: underline;
-	color:#999;
-}
-
