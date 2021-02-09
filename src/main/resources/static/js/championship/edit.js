@@ -364,16 +364,19 @@ var app = new Vue({
 			// POSTリクエスト送信
 			fetch('/api/championship/update', param)
 				.then(response => {
-					if(response.ok){
-						alert('更新が完了しました。大会一覧画面へリダイレクトします。');
+					if (response.ok) {
+						alert('更新が完了しました。\n大会一覧画面へリダイレクトします。');
 						window.location.href = '/championship/index';
+					} else if (response.status === 405) {
+						alert('大会がすでに削除された可能性があります。\n画面をリロードしてください。');
 					} else {
 						return response.json();		// Promiseを返す
 					}
 				})
 				.then(data => {		// JSONデータ
+					console.log(data.status);
 					this.displayErrorMessage(data);
-					alert('エラーが発生しました。入力項目をご確認ください。')
+					alert('エラーが発生しました。\n入力項目をご確認ください。');
 				})
 				.catch(error => {	// エラーの場合
 					console.log(error);

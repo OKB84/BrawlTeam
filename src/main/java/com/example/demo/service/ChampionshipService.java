@@ -119,7 +119,7 @@ public class ChampionshipService {
 		}
 	}
 
-	// 更新
+	// 更新（チーム及び所属プレイヤーについては一旦全削除してから再構築）
 	public int update(ChampionshipDto championshipDto) {
 
 		// 日付と時刻を合わせてカラムに保存するためDTO詰め替え
@@ -127,18 +127,20 @@ public class ChampionshipService {
 		ChampionshipCreateDto championshipCreateDto = refillChampionshipCreateDto(championshipDto);
 
 		// 大会、チーム、所属プレイヤーの各レコード合計登録・更新件数
-		int totalCreateCount = 0;
+		int totalUpdateCount = 0;
 
 		// 大会基本情報を更新
-		totalCreateCount += championshipMapper.update(championshipCreateDto);
+		totalUpdateCount += championshipMapper.update(championshipCreateDto);
 
 		// 既存のチーム及び所属プレイヤー情報を削除
-		totalCreateCount += teamMapper.delete(championshipDto);
+		totalUpdateCount += teamMapper.delete(championshipDto);
 
-		// チーム及び所属プレイヤー情報を登録
-		totalCreateCount += createTeamAndMember(championshipDto);
+		// すでに削除済みの大会だった場合以外はチーム及び所属プレイヤー情報を登録
+		if (totalUpdateCount > 0) {
+			totalUpdateCount += createTeamAndMember(championshipDto);
+		}
 
-		return totalCreateCount;
+		return totalUpdateCount;
 	}
 
 	// 削除（複数件一括）

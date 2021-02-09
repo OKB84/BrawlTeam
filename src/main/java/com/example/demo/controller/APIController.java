@@ -159,7 +159,12 @@ public class APIController {
 		championshipDto.setOrganizerId((Integer)session.getAttribute("userId"));
 
 		// 大会情報を更新の上、既存のチーム及び所属プレイヤー情報を削除してから登録
-		int totalCreateCount = championshipService.update(championshipDto);
+		int totalUpdateCount = championshipService.update(championshipDto);
+
+		// すでに削除済みの大会だった場合
+		if (totalUpdateCount == 0) {
+			return new ResponseEntity<>(new ArrayList<String>(), HttpStatus.METHOD_NOT_ALLOWED);
+		}
 
 		return new ResponseEntity<>(new ArrayList<String>(), HttpStatus.OK);
 	}
