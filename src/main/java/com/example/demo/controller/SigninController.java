@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.controller.dto.SocialMediaDto;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.service.ChampionshipMemberService;
 import com.example.demo.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
@@ -33,6 +34,9 @@ public class SigninController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	ChampionshipMemberService championshipMemberService;
 
 	@Autowired
 	HttpSession session;
@@ -106,6 +110,15 @@ public class SigninController {
 		}
 
 		// セッションスコープにユーザIDが保存されていなければ、ログインチェック機能によりログインページにリダイレクト
-		return "redirect:/championship/index";
+		return "redirect:/callback";
+	}
+
+	// ソーシャルログインからのコールバック
+	@GetMapping("/callback")
+	String callback() {
+		// 登録済みのメンバーが1人以上いれば大会一覧を、そうでなければメンバー追加画面を表示
+		return championshipMemberService.search().size() > 0
+				? "redirect:/championship/index"
+				: "redirect:/championship-member/create";
 	}
 }

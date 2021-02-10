@@ -56,6 +56,7 @@ public class LoginCheckFilter implements Filter{
 
         // ログインを必要とするURLを定義
         registrationBean.addUrlPatterns(
+        		"/callback",
         		"/api/*",
         		"/signout",
         		"/championship-member/*",

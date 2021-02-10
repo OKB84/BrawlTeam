@@ -11,7 +11,7 @@ function onSignIn(googleUser) {
 	xhr.onload = function() {
     	if (xhr.readyState === 4) {
   	    	if (xhr.status === 200) {
-	        	window.location.href = '/championship/index';
+	        	window.location.href = '/callback'
 	        	var auth2 = gapi.auth2.getAuthInstance();
 	            auth2.disconnect();
   	    	} else {
