@@ -238,10 +238,10 @@ public class APIController {
 		try {
 			dto = playerService.setPlayerBattleInfo(dto);
 			// 中央値を追加して返却
-			return ownBrawlerService.setMedian(dto);
 		} catch (HttpClientErrorException e) {
-			return dto;
+			e.printStackTrace();
 		}
+		return ownBrawlerService.setMedian(dto);
 	}
 
 	// 大会情報削除
