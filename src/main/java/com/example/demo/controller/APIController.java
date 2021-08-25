@@ -233,7 +233,7 @@ public class APIController {
 	PlayerDetailDto getMemberDetail(@PathVariable("playerTag") String playerTag) {
 
 		// 「キャラタイプ別の最多トロフィー中央値」以外の詳細情報を取得
-		PlayerDetailDto dto = playerService.getPlayerBasicDetail("%" + playerTag);
+		PlayerDetailDto dto = playerService.getPlayerBasicDetail("%23" + playerTag);
 
 		try {
 			dto = playerService.setPlayerBattleInfo(dto);
@@ -269,7 +269,7 @@ public class APIController {
 		}
 
 		// 公式APIからプレイヤー情報を取得するために、入力されたプレイヤータグの先頭#を%にする
-		String playerTag = "%" + playerTagDto.getPlayerTag();
+		String playerTag = "%23" + playerTagDto.getPlayerTag();
 
 		// すでにメンバー追加済みのメンバーであればエラーを返す
 		if (championshipMemberService.isExistedMember(playerTag)) {
@@ -325,7 +325,7 @@ public class APIController {
 
 		// 公式APIからクラブ所属メンバーの一覧を取得
 		// 公式APIからのプレイヤー情報の際にプレイヤータグの#を%にしていないとエラーになる
-		ClubPlayerAPIDto clubPlayerAPIDto = brawlStarsAPIService.getClubPlayerInfo(clubTag.replace("#", "%"));
+		ClubPlayerAPIDto clubPlayerAPIDto = brawlStarsAPIService.getClubPlayerInfo(clubTag.replace("#", "%23"));
 
 		// クラブ所属メンバーの詳細情報（所有キャラクター等）を取得
 		List<PlayerInfoDto> playerInfoDtoList = brawlStarsAPIService.getClubMemberInfo(clubPlayerAPIDto.getItems());
@@ -355,7 +355,7 @@ public class APIController {
 		}
 
 		// 公式APIからプレイヤー情報を取得するために、入力されたプレイヤータグの先頭#を%にする
-		String playerTag = "%" + playerTagDto.getPlayerTag();
+		String playerTag = "%23" + playerTagDto.getPlayerTag();
 
 		// 公式APIからプレイヤー情報を取得
 		PlayerInfoDto playerInfoDto = brawlStarsAPIService.getPlayerInfo(playerTag);
