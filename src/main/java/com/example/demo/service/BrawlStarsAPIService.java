@@ -91,7 +91,7 @@ public class BrawlStarsAPIService {
 		List<PlayerInfoDto> playerInfoList = new ArrayList<PlayerInfoDto>();
 
 		for (ClubMember member : clubMemberList) {
-			PlayerInfoDto dto = getPlayerInfo(member.getTag().replace("#", "%23"));
+			PlayerInfoDto dto = getPlayerInfo(member.getTag().replace("#", "%"));
 			if (dto != null) {
 				playerInfoList.add(dto);
 			}
